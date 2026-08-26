@@ -27,25 +27,25 @@
                     class="{{ request()->routeIs('shared.folders') ? 'active menu-item' : '' }}">
                     <i class="fa fa-folder"></i>
                     <span class="menu-label">Shared Folders</span>
-                    @if (request()->routeIs('shared.folders') || isset($activeFileId))
-                        <span class="ms-auto d-flex align-items-center gap-2">
-                            <span id="fbSearchBtn" class="fb-root-btn" title="Search folders &amp; files">
-                                <i class="fa fa-search"></i>
-                            </span>
-                            <span id="fbHomeBtn" class="fb-root-btn" title="Go to Shared Folders home">
-                                <i class="fa fa-house"></i>
-                            </span>
-                            <span id="fbGoToRootBtn" class="fb-root-btn" title="Collapse tree">
-                                <i class="fa fa-minus"></i>
-                            </span>
-                            <i class="fa fa-chevron-down toggle-icon"></i>
-                        </span>
-                    @endif
+                    <i class="fa fa-chevron-down ms-auto toggle-icon"></i>
                 </a>
 
                 <ul class="submenu">
                     <li>
                         <div class="px-0">
+                            @if (request()->routeIs('shared.folders') || isset($activeFileId))
+                                <div class="fb-tree-toolbar">
+                                    <span id="fbSearchBtn" class="fb-root-btn" title="Search folders &amp; files">
+                                        <i class="fa fa-search"></i>
+                                    </span>
+                                    <span id="fbHomeBtn" class="fb-root-btn" title="Go to Shared Folders home">
+                                        <i class="fa fa-house"></i>
+                                    </span>
+                                    <span id="fbGoToRootBtn" class="fb-root-btn" title="Collapse tree">
+                                        <i class="fa fa-minus"></i>
+                                    </span>
+                                </div>
+                            @endif
                             <div id="fbTreeSearchWrap" class="fb-tree-search-wrap d-none">
                                 <i class="fa fa-search fb-tree-search-icon"></i>
                                 <input type="text" id="fbTreeSearchInput" class="fb-tree-search-input"
@@ -157,6 +157,17 @@
 </div>
 
 <style>
+    /* Small toolbar (search / home / collapse) that sits above the tree
+       itself, inside the flyout — not crammed into the "Shared Folders"
+       nav link row, which only has room for the label and its chevron. */
+    .fb-tree-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 6px;
+        padding: 0 8px 8px;
+    }
+
     /* Tree View - Sidebar styles (professional, compact) */
     .fb-tree-view {
         max-height: 360px;
@@ -172,7 +183,8 @@
         gap: 8px;
         width: 100%;
         border-radius: 6px;
-        padding: 2px 8px;
+        padding: 1px 8px;
+        line-height: 18px;
         cursor: pointer;
         transition: background .12s ease, color .12s ease, transform .06s ease;
         user-select: none;
@@ -261,13 +273,78 @@
         min-width: 0;
         flex: 1 1 auto;
         font-size: 13px;
+        line-height: 18px;
         overflow: hidden;
     }
 
     .fb-tree-label i {
         width: 18px;
         text-align: center;
+        line-height: inherit;
         flex-shrink: 0;
+    }
+
+    /* This panel doesn't reliably load the Drive page's own icon-color
+       stylesheet depending on which layout the current page uses, so every
+       icon color is pinned here too (with !important, since this tree also
+       sits inside a .submenu-classed container whose own rules can win on
+       specificity) rather than relying on classes resolving correctly
+       wherever this tree happens to render. */
+    #fbTreeView .fb-folder-icon {
+        color: #eab308 !important;
+    }
+
+    #fbTreeView .fb-file-pdf-icon {
+        color: #dc2626 !important;
+    }
+
+    #fbTreeView .fb-file-word-icon {
+        color: #2563eb !important;
+    }
+
+    #fbTreeView .fb-file-excel-icon {
+        color: #16a34a !important;
+    }
+
+    #fbTreeView .fb-file-ppt-icon {
+        color: #ea580c !important;
+    }
+
+    #fbTreeView .fb-file-zip-icon {
+        color: #b45309 !important;
+    }
+
+    #fbTreeView .fb-file-img-icon {
+        color: #7c3aed !important;
+    }
+
+    #fbTreeView .fb-file-icon {
+        color: #64748b !important;
+    }
+
+    /* Force every row to a fixed, tight height — some external stylesheets
+       loaded on pages that embed this tree define higher-specificity rules
+       (e.g. a generic ".submenu a" nav-link rule) that were still inflating
+       row height and the gap between rows despite the sizing rules above. */
+    #fbTreeView .fb-tree-node {
+        margin: 0 !important;
+        /* padding-left is set inline per-row (depth * 14 + 20px) to draw the
+           indentation — must not be touched here, only the vertical padding
+           and the right side. */
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        padding-right: 8px !important;
+        min-height: 22px !important;
+        line-height: 22px !important;
+    }
+
+    #fbTreeView .fb-tree-label,
+    #fbTreeView .fb-tree-label i,
+    #fbTreeView .fb-tree-label span,
+    #fbTreeView .fb-tree-label a {
+        margin: 0 !important;
+        padding: 0 !important;
+        line-height: 22px !important;
     }
 
     /* Long folder names truncate with an ellipsis instead of wrapping —
@@ -286,6 +363,8 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         padding: 0;
+        margin: 0;
+        line-height: inherit;
         vertical-align: middle;
     }
 
@@ -410,6 +489,12 @@
                     // noop
                 }
             });
+
+            // The chevron always shows now, on every page, but has no click
+            // handler of its own — it's inside #treeViewMenuLink, so a click
+            // on it just bubbles up to the handler above: toggle in place
+            // when already on the folders page, otherwise redirect there
+            // like any normal link click.
 
             $('#fbGoToRootBtn').on('click', function(e) {
                 e.stopPropagation();
