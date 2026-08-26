@@ -1,0 +1,423 @@
+:root {
+    --primary: #6e3e47;
+    --primary-hover: #6e3e47;
+    --bg-gradient: linear-gradient(135deg, #eef2f7, #f8f9fb);
+    --text-dark: #333;
+    --text-muted: #777;
+    --text-light: #999;
+    --border-color: #ddd;
+    --radius: 10px;
+    --shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+/* LANDING PAGE */
+
+.landing-body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #3b82f6, #1e3a8a);
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* Wrapper */
+.landing-wrapper {
+    height: 100vh;
+}
+
+/* Card */
+.landing-card {
+    background: #fff;
+    padding: 50px 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    max-width: 450px;
+    width: 100%;
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+/* Logo */
+.landing-logo {
+    width: 120px;
+}
+
+/* Buttons */
+.landing-card .btn {
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* LOGIN PAGE */
+/* ===============================
+   ANIMATED NETWORK BACKGROUND
+=============================== */
+
+.network-bg {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+}
+
+/* Floating dots */
+.network-bg span {
+    position: absolute;
+    display: block;
+    width: 12px;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    animation: moveDots 20s linear infinite;
+}
+
+/* Different positions */
+.network-bg span:nth-child(1) {
+    top: 10%;
+    left: 20%;
+    animation-delay: 0s;
+}
+
+.network-bg span:nth-child(2) {
+    top: 30%;
+    left: 70%;
+    animation-delay: 4s;
+}
+
+.network-bg span:nth-child(3) {
+    top: 60%;
+    left: 40%;
+    animation-delay: 8s;
+}
+
+.network-bg span:nth-child(4) {
+    top: 80%;
+    left: 10%;
+    animation-delay: 12s;
+}
+
+.network-bg span:nth-child(5) {
+    top: 50%;
+    left: 90%;
+    animation-delay: 16s;
+}
+
+/* Animation */
+@keyframes moveDots {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 0.3;
+    }
+
+    50% {
+        transform: translateY(-100px) scale(1.5);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 0.3;
+    }
+}
+
+.login-body {
+    background: #f1f5f9;
+}
+
+.login-left {
+    background: linear-gradient(135deg, #6e3e47, #ede1e3);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Soft pattern overlay */
+.login-left::before {
+    content: "";
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    top: -100px;
+    left: -100px;
+}
+
+.login-left::after {
+    content: "";
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    bottom: -150px;
+    right: -100px;
+}
+
+/* ===============================
+   RESET + GLOBAL
+=============================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+    /* 🚀 prevents scroll */
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* ===============================
+   BACKGROUND
+=============================== */
+.landing-body {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Canvas network */
+#networkCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2;
+}
+
+/* Gradient overlay */
+.network-bg {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+    z-index: -3;
+}
+
+/* Optional floating dots */
+.network-bg span {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    animation: float 20s infinite ease-in-out;
+}
+
+.network-bg span:nth-child(1) {
+    top: 20%;
+    left: 10%;
+}
+
+.network-bg span:nth-child(2) {
+    top: 40%;
+    left: 80%;
+}
+
+.network-bg span:nth-child(3) {
+    top: 70%;
+    left: 30%;
+}
+
+.network-bg span:nth-child(4) {
+    top: 60%;
+    left: 60%;
+}
+
+.network-bg span:nth-child(5) {
+    top: 30%;
+    left: 50%;
+}
+
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0);
+        opacity: 0.3;
+    }
+
+    50% {
+        transform: translateY(-40px);
+        opacity: 0.8;
+    }
+}
+
+/* ===============================
+   CENTER WRAPPER
+=============================== */
+.landing-wrapper {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ===============================
+   CARD DESIGN (GLASS EFFECT 🔥)
+=============================== */
+.landing-card {
+    width: 100%;
+    max-width: 420px;
+    padding: 40px 30px;
+    border-radius: 16px;
+
+    /* Glassmorphism */
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+
+    text-align: center;
+    color: #fff;
+
+    animation: fadeInUp 0.6s ease;
+}
+
+/* ===============================
+   LOGO
+=============================== */
+.landing-logo {
+    width: 120px;
+}
+
+/* ===============================
+   TEXT
+=============================== */
+.landing-card h1 {
+    color: #fff;
+}
+
+.landing-card p {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* ===============================
+   BUTTONS
+=============================== */
+.landing-card .btn {
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+}
+
+/* Primary button */
+.btn-primary {
+    background: #fff;
+    color: #1e3a8a;
+    border: none;
+}
+
+.btn-primary:hover {
+    background: #e2e8f0;
+    color: #1e3a8a;
+}
+
+/* Outline */
+.btn-outline-primary {
+    border: 1px solid #fff;
+    color: #fff;
+}
+
+.btn-outline-primary:hover {
+    background: #fff;
+    color: #1e3a8a;
+}
+
+/* ===============================
+   ANIMATION
+=============================== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===============================
+   RESPONSIVE
+=============================== */
+@media (max-width: 576px) {
+    .landing-card {
+        margin: 20px;
+        padding: 30px 20px;
+    }
+
+    .landing-logo {
+        width: 90px;
+    }
+}
+
+/* LOGIN CARD */
+.login-card {
+    width: 66%;
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* LOGO */
+.login-logo {
+    width: 320px;
+}
+
+/* INPUT */
+.login-card .form-control {
+    border-radius: 8px;
+}
+
+/* BUTTON */
+.login-card .btn {
+    border-radius: 8px;
+    padding: 10px;
+    font-weight: 600;
+}
+
+.primary-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: var(--radius);
+    border: none;
+    background: var(--primary);
+    color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        transform 0.1s ease;
+}
+
+/* MOBILE */
+@media (max-width: 991px) {
+    .login-left {
+        display: none !important;
+    }
+}
