@@ -943,6 +943,14 @@ input:focus {
     .sidebar.active #treeViewMenu .fb-tree-toggle {
         color: #fff;
     }
+
+    /* The Shared Folders tree needs more room than the generic 200px
+       flyout — folder/file names run much longer than the other submenus
+       (Settings, etc.), and nesting eats into that width with indentation
+       on top of the toggle button and icon. */
+    .sidebar.active #treeViewMenu > .submenu {
+        width: 300px;
+    }
 }
 
 /* Scrollable menu — long expanded trees/submenus (e.g. Project Folders tree,
