@@ -4,16 +4,17 @@
 
 @section('content')
 
-    <div class="rg-wrap">
-
-        {{-- Logo (mobile/tablet only — the branding panel with the logo is hidden below the lg breakpoint).
-             The logo artwork has near-white text baked in for the dark branding background, so it needs
-             a matching dark panel here too or the wordmark is invisible on the white card. --}}
-        <div class="rg-mobile-logo d-lg-none text-center">
-            <div class="rg-mobile-logo-box">
-                <img src="{{ asset('admin/images/kingsmeal-agro-logo.png') }}" alt="Logo" class="rg-mobile-logo-img">
-            </div>
+    {{-- Logo (mobile/tablet only — the branding panel with the logo is hidden below the lg breakpoint).
+         Sits above the white card, at the top of the page. The logo artwork has near-white text baked
+         in for the dark branding background, so it needs a matching dark panel here too or the
+         wordmark is invisible. --}}
+    <div class="rg-mobile-logo d-lg-none text-center">
+        <div class="rg-mobile-logo-box">
+            <img src="{{ asset('admin/images/kingsmeal-agro-logo.png') }}" alt="Logo" class="rg-mobile-logo-img">
         </div>
+    </div>
+
+    <div class="rg-wrap">
 
         {{-- Header --}}
         <div class="rg-header">
@@ -122,7 +123,7 @@
 
         /* ── Mobile logo (hidden at lg+, where the branding panel takes over) ── */
         .rg-mobile-logo {
-            padding: 20px 20px 0;
+            margin-bottom: 20px;
         }
 
         .rg-mobile-logo-box {
