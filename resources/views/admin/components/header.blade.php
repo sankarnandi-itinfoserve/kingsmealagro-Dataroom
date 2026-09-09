@@ -3,7 +3,7 @@
     <div class="container-fluid">
 
         {{-- LEFT SECTION --}}
-        <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center gap-3 hdr-left">
 
             {{-- Sidebar Toggle (desktop/tablet) --}}
             <button id="toggleSidebar" class="btn btn-light d-none d-lg-inline-flex">
@@ -11,7 +11,7 @@
             </button>
 
             {{-- Logo --}}
-            <a href="#" class="navbar-brand fw-bold mb-0 me-0">
+            <a href="#" class="navbar-brand fw-bold mb-0 me-0 hdr-brand-text">
                 {{ config('app.name', 'AdminPanel') }}
             </a>
 
@@ -24,7 +24,7 @@
 
 
         {{-- RIGHT SECTION --}}
-        <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center gap-3 hdr-right">
 
 
 

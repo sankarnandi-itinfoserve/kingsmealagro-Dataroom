@@ -32,7 +32,7 @@
                 @endif
                 <div>
                     <div class="db-hero-title">{{ $greeting }}, <span>{{ $firstName }}</span></div>
-                    <div class="db-hero-sub">Welcome to NLG-VDR</div>
+                    <div class="db-hero-sub">Welcome to Kingsmealagro Data Room</div>
                 </div>
             </div>
 
