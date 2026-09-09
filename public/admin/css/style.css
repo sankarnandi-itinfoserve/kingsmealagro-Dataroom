@@ -121,6 +121,13 @@ a {
     object-fit: contain;
 }
 
+/* Full wordmark shows by default; the icon-only mark is swapped in when
+   the sidebar collapses (see the .sidebar.active rules below) since the
+   full logo doesn't fit the narrow rail and was rendering cut off. */
+.sidebar-logo-mark {
+    display: none;
+}
+
 .sidebar-logo img.login-logo {
     width: 34px;
     height: 34px;
@@ -824,6 +831,14 @@ input:focus {
         height: 38px;
     }
 
+    .sidebar.active .sidebar-logo-full {
+        display: none;
+    }
+
+    .sidebar.active .sidebar-logo-mark {
+        display: block;
+    }
+
     .sidebar.active .sidebar-footer {
         padding: 10px 8px;
     }
@@ -886,10 +901,16 @@ input:focus {
         overflow: visible;
     }
 
-    /* Popup submenu in collapsed mode */
+    /* Popup submenu in collapsed mode. left:100% (not a hardcoded px value)
+       is what actually matters here — the trigger <li> is only as wide as
+       its icon (~40px), so a fixed 74px offset left a real dead-zone gap
+       between the icon and the flyout with nothing hoverable in it. 100%
+       sits the flyout flush against the <li>'s own right edge instead, so
+       there's no gap for the cursor to cross at all — deliberately no
+       margin here, since any offset would just reintroduce that gap. */
     .sidebar.active .submenu {
         position: absolute;
-        left: 74px;
+        left: 100%;
         top: 0;
         width: 200px;
         background: #2d3e50;
@@ -904,7 +925,8 @@ input:focus {
     }
 
     .sidebar.active .has-submenu.open > .submenu,
-    .sidebar.active .has-submenu:hover > .submenu {
+    .sidebar.active .has-submenu:hover > .submenu,
+    .sidebar.active .has-submenu.hover-open > .submenu {
         display: block;
     }
 

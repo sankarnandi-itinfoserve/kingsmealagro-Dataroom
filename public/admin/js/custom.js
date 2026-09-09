@@ -34,6 +34,58 @@ document.addEventListener('DOMContentLoaded', function () {
         localStorage.setItem('sidebarState', 'inactive');
     });
 
+    // Collapsed-sidebar hover flyouts (Settings, Shared Folders, etc.) used
+    // to rely purely on CSS :hover, which snaps the flyout closed the
+    // instant the cursor leaves the narrow icon rail — including the small
+    // gap between the rail and the flyout itself — before there's time to
+    // reach in and click anything. Keep it open through that gap with a
+    // short grace period instead: only actually close once the cursor has
+    // been outside both the rail item and its flyout for a beat.
+    const hoverCloseTimers = new WeakMap();
+
+    document.querySelectorAll('.has-submenu').forEach(function (li) {
+        const submenu = li.querySelector(':scope > .submenu');
+
+        function cancelClose() {
+            const pending = hoverCloseTimers.get(li);
+            if (pending) {
+                clearTimeout(pending);
+                hoverCloseTimers.delete(li);
+            }
+            li.classList.add('hover-open');
+        }
+
+        function scheduleClose() {
+            const timer = setTimeout(function () {
+                li.classList.remove('hover-open');
+                hoverCloseTimers.delete(li);
+            }, 250);
+            hoverCloseTimers.set(li, timer);
+        }
+
+        // Listening on both the trigger AND the flyout itself matters: once
+        // display:none actually hides the flyout, it can no longer receive
+        // its own hover events to reopen — so if the trigger-only grace
+        // period ever ran out mid-transit, the menu would be gone for good
+        // with no way to recover it short of moving off and back on.
+        li.addEventListener('mouseenter', cancelClose);
+        li.addEventListener('mouseleave', scheduleClose);
+        if (submenu) {
+            submenu.addEventListener('mouseenter', cancelClose);
+            submenu.addEventListener('mouseleave', scheduleClose);
+        }
+    });
+
+    // Click-toggled submenus (expanded sidebar) stay open until toggled
+    // again — close them when the user clicks anywhere else on the page.
+    document.addEventListener('click', function (e) {
+        document.querySelectorAll('.has-submenu.open').forEach(function (li) {
+            if (!li.contains(e.target)) {
+                li.classList.remove('open');
+            }
+        });
+    });
+
     // // Menu logic
 
     const menuLinks = document.querySelectorAll('.menu-list a');

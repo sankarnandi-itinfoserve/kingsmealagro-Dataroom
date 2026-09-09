@@ -134,6 +134,12 @@ Route::middleware(['auth', 'session.timeout'])->group(function () {
     Route::get('/folders/favorite/{parent_id?}', [FolderController::class, 'favorites'])->name('favorite.folders');
     Route::post('/folders/share', [FolderController::class, 'share'])->name('folders.share');
 
+    // Lazy-loaded JSON for the sidebar's lightweight tree view, for pages
+    // (e.g. Dashboard) that don't already pass rootFolderData themselves —
+    // fetched once when the collapsed sidebar's Shared Folders icon is
+    // hovered, so the flyout preview isn't just an empty box.
+    Route::get('/folders/sidebar-tree', [FolderController::class, 'sidebarTreeData'])->name('folders.sidebarTree');
+
     Route::post('/folders/rename', [FolderController::class, 'rename'])->name('folders.mrename');
     Route::post('/folders/move', [FolderController::class, 'move'])->name('folders.mmove');
     Route::post('/folders/copy-multiple', [FolderController::class, 'copyMultiple'])->name('folders.mcopyMultiple');
