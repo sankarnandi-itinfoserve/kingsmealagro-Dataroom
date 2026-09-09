@@ -16,7 +16,7 @@ use App\Http\Controllers\Admin\AnalyticsController;
 use App\Http\Controllers\Admin\ProjectController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('dashboard');
 })->middleware('auth');
 
 
