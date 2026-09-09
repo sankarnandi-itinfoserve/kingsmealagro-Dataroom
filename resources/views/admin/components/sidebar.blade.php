@@ -1,8 +1,11 @@
 <div class="sidebar_inner">
 
-    {{-- Logo --}}
+    {{-- Logo — full wordmark when expanded, just the mark (favicon crop)
+         when collapsed to the icon-only rail, where the full logo doesn't
+         fit and was rendering cut off. --}}
     <div class="logo text-center">
-        <img src="{{ asset('admin/images/kingsmeal-agro-logo.png') }}" alt="Logo" class="sidebar-logo">
+        <img src="{{ asset('admin/images/kingsmeal-agro-logo.png') }}" alt="Logo" class="sidebar-logo sidebar-logo-full">
+        <img src="{{ asset('admin/images/favicon-512.png') }}" alt="Logo" class="sidebar-logo sidebar-logo-mark">
     </div>
 
 
@@ -33,19 +36,22 @@
                 <ul class="submenu">
                     <li>
                         <div class="px-0">
-                            @if (request()->routeIs('shared.folders') || isset($activeFileId))
-                                <div class="fb-tree-toolbar">
-                                    <span id="fbSearchBtn" class="fb-root-btn" title="Search folders &amp; files">
-                                        <i class="fa fa-search"></i>
+                            <div class="fb-tree-toolbar">
+                                <span class="fb-tree-toolbar-label">Shared Folders</span>
+                                @if (request()->routeIs('shared.folders') || isset($activeFileId))
+                                    <span class="fb-tree-toolbar-actions">
+                                        <span id="fbSearchBtn" class="fb-root-btn" title="Search folders &amp; files">
+                                            <i class="fa fa-search"></i>
+                                        </span>
+                                        <span id="fbHomeBtn" class="fb-root-btn" title="Go to Shared Folders home">
+                                            <i class="fa fa-house"></i>
+                                        </span>
+                                        <span id="fbGoToRootBtn" class="fb-root-btn" title="Collapse tree">
+                                            <i class="fa fa-minus"></i>
+                                        </span>
                                     </span>
-                                    <span id="fbHomeBtn" class="fb-root-btn" title="Go to Shared Folders home">
-                                        <i class="fa fa-house"></i>
-                                    </span>
-                                    <span id="fbGoToRootBtn" class="fb-root-btn" title="Collapse tree">
-                                        <i class="fa fa-minus"></i>
-                                    </span>
-                                </div>
-                            @endif
+                                @endif
+                            </div>
                             <div id="fbTreeSearchWrap" class="fb-tree-search-wrap d-none">
                                 <i class="fa fa-search fb-tree-search-icon"></i>
                                 <input type="text" id="fbTreeSearchInput" class="fb-tree-search-input"
@@ -157,15 +163,32 @@
 </div>
 
 <style>
-    /* Small toolbar (search / home / collapse) that sits above the tree
-       itself, inside the flyout — not crammed into the "Shared Folders"
-       nav link row, which only has room for the label and its chevron. */
+    /* Small header row (section label + search/home/collapse) that sits
+       above the tree itself, inside the flyout — not crammed into the
+       "Shared Folders" nav link row, which only has room for the label and
+       its chevron. */
     .fb-tree-toolbar {
         display: flex;
         align-items: center;
-        justify-content: flex-end;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 6px 8px 10px;
+    }
+
+    .fb-tree-toolbar-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .05em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.5);
+        white-space: nowrap;
+    }
+
+    .fb-tree-toolbar-actions {
+        display: flex;
+        align-items: center;
         gap: 6px;
-        padding: 0 8px 8px;
+        flex-shrink: 0;
     }
 
     /* Tree View - Sidebar styles (professional, compact) */
@@ -496,6 +519,27 @@
             // when already on the folders page, otherwise redirect there
             // like any normal link click.
 
+            // Hovering the collapsed rail's Shared Folders icon opens a
+            // preview flyout (see custom.js) — but on pages that never
+            // built rootFolderData themselves (anything besides Drive/file
+            // preview), that flyout would just be an empty box. Fetch the
+            // real tree once, the first time it's hovered anywhere.
+            $('#treeViewMenu').on('mouseenter', function() {
+                if (window._fbTreeDataLoaded || typeof window._fbSetRootFolder !== 'function') {
+                    return;
+                }
+                window._fbTreeDataLoaded = true;
+                $.getJSON('{{ route('folders.sidebarTree') }}')
+                    .done(function(res) {
+                        if (res && res.rootFolderData) {
+                            window._fbSetRootFolder(res.rootFolderData);
+                        }
+                    })
+                    .fail(function() {
+                        window._fbTreeDataLoaded = false;
+                    });
+            });
+
             $('#fbGoToRootBtn').on('click', function(e) {
                 e.stopPropagation();
                 e.preventDefault();
@@ -733,6 +777,15 @@
                     searchQuery = (query || '').trim().toLowerCase();
                     render();
                 };
+
+                // Lets the hover lazy-load fetch (below) hand this tree its
+                // real data on pages that didn't already pass rootFolderData
+                // themselves.
+                window._fbSetRootFolder = function(newRoot) {
+                    rootFolder = newRoot;
+                    render();
+                };
+                window._fbTreeDataLoaded = (rootFolder.children || []).length > 0;
 
                 // A search result link is a full page load — read back
                 // whatever query was in progress so the tree lands here

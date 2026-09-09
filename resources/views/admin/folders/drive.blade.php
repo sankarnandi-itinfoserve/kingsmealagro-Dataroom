@@ -58,12 +58,6 @@
                         <button type="button" class="fb-tool-btn" data-action="favorite-current">
                             <i class="fa-solid fa-star" style="color:#f59e0b;"></i> Favorite
                         </button>
-                        <button class="fb-tool-btn fb-tool-btn-primary" data-action="add-file-folder">
-                            <i class="fa-solid fa-file-circle-plus"></i> Add File
-                        </button>
-                        <button class="fb-tool-btn fb-tool-btn-primary" data-action="add-folder-toolbar">
-                            <i class="fa-solid fa-folder-plus"></i> Add Folder
-                        </button>
                     </div>
 
                     <div id="fbListView" class="fb-view-panel">
@@ -92,122 +86,19 @@
 
                 </section>
             </div>
-            <!-- Upload Modal (iframe to reuse upload page) -->
-            <div id="uploadModal" class="fb-modal d-none" aria-hidden="true">
-                <div class="fb-modal-backdrop"></div>
-                <div class="fb-modal-dialog">
-                    <div class="fb-modal-header">
-                        <h5 class="fb-modal-title">Upload to folder</h5>
-                        <button type="button" class="fb-modal-close" id="uploadModalClose">&times;</button>
-                    </div>
-                    <div class="fb-modal-body">
-                        <!-- Embedded upload UI -->
-                        <div id="modalUpload" class="upload-card">
-                            <p class="text-muted" style="margin-top:6px;">Drag & drop files here or click to select.
-                                Multiple files supported.</p>
-
-                            <div id="uploadDropzone" class="upload-dropzone" tabindex="0">
-                                <div>
-                                    <div style="font-weight:700">Drop files here</div>
-                                    <div style="font-size:13px;color:#6b7280">or click to browse your computer</div>
-                                </div>
-                            </div>
-
-                            <div class="upload-actions">
-                                <input id="uploadInput" type="file" multiple style="display:none" />
-                                <input id="uploadInputFolder" type="file" webkitdirectory directory multiple
-                                    style="display:none" />
-                                <button id="btnSelect" class="btn-clear">Select Files</button>
-                                <button id="btnSelectFolder" class="btn-clear">Select Folder</button>
-                                <button id="btnUpload" class="primary-btn">Upload All</button>
-                                <button id="btnClear" class="btn-clear">Clear</button>
-                                <div style="margin-left:auto;color:#475569;font-size:13px" id="totalCount">0 files</div>
-                            </div>
-
-                            <div id="uploadList" class="upload-list" aria-live="polite"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
-    <!-- Right-click Context Menu -->
-    <!-- Create Folder Modal -->
-    <div id="createFolderModal" class="fb-modal d-none" aria-hidden="true">
+    <div id="fbDownloadModal" class="fb-modal fb-download-modal d-none">
         <div class="fb-modal-backdrop"></div>
-        <div class="cf-dialog">
-
-            {{-- Header --}}
-            <div class="cf-header">
-                <div class="cf-header-icon">
-                    <i class="fa-solid fa-folder-plus"></i>
-                </div>
-                <div class="cf-header-text">
-                    <h5 class="cf-title">New Folder</h5>
-                    <p class="cf-sub">Enter a name for the new folder.</p>
-                </div>
-                <button type="button" class="cf-close" id="createFolderModalClose" aria-label="Close">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+        <div class="fb-download-dialog">
+            <div class="fb-download-icon"><i class="fa-solid fa-cloud-arrow-down"></i></div>
+            <p class="fb-download-title" id="fbDownloadTitle">Preparing download…</p>
+            <div class="fb-download-progress">
+                <div class="fb-download-progress-bar" id="fbDownloadProgressBar"></div>
             </div>
-
-            {{-- Body --}}
-            <div class="cf-body">
-                <label class="cf-label" for="newFolderName">Folder Name</label>
-                <div class="cf-input-wrap">
-                    <i class="fa-solid fa-folder cf-input-icon"></i>
-                    <input type="text" id="newFolderName" class="cf-input" placeholder="e.g. Project Documents"
-                        autocomplete="off" />
-                </div>
-            </div>
-
-            {{-- Footer --}}
-            <div class="cf-footer">
-                <button type="button" class="cf-btn-cancel" id="createFolderCancel">Cancel</button>
-                <button type="button" class="cf-btn-create" id="createFolderConfirm">
-                    <i class="fa-solid fa-folder-plus"></i> Create Folder
-                </button>
-            </div>
-
-        </div>
-    </div>
-
-    {{-- ── "Copy to..." / "Move to..." destination-picker modal — shared by
-         both actions, only the title/icon/button label differ (set in JS) ── --}}
-    <div id="copyItemModal" class="fb-modal d-none" aria-hidden="true">
-        <div class="fb-modal-backdrop"></div>
-        <div class="cf-dialog cp-dialog">
-
-            <div class="cf-header">
-                <div class="cf-header-icon" id="copyItemHeaderIcon">
-                    <i class="fa-solid fa-copy"></i>
-                </div>
-                <div class="cf-header-text">
-                    <h5 class="cf-title" id="copyItemTitle">Copy to&hellip;</h5>
-                    <p class="cf-sub" id="copyItemSub">Choose a destination folder.</p>
-                </div>
-                <button type="button" class="cf-close" id="copyItemModalClose" aria-label="Close">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-
-            <div class="cf-body cp-body">
-                <div class="cp-search-wrap">
-                    <i class="fa-solid fa-magnifying-glass cp-search-icon"></i>
-                    <input type="text" id="copyItemSearch" class="cp-search-input" placeholder="Search folders…"
-                        autocomplete="off">
-                </div>
-                <div class="cp-tree" id="copyItemTree"></div>
-            </div>
-
-            <div class="cf-footer">
-                <button type="button" class="cf-btn-cancel" id="copyItemCancel">Cancel</button>
-                <button type="button" class="cf-btn-create" id="copyItemConfirm" disabled>
-                    <i class="fa-solid fa-copy"></i> Copy Here
-                </button>
-            </div>
-
+            <p class="fb-download-percent" id="fbDownloadPercent">0%</p>
+            <button type="button" class="fb-download-cancel" id="fbDownloadCancelBtn">Cancel</button>
         </div>
     </div>
 
@@ -496,140 +387,6 @@
             color: #64748b;
         }
 
-        .fb-dropdown {
-            position: relative;
-        }
-
-        .fb-row-more-btn {
-            width: 26px;
-            height: 26px;
-            flex-shrink: 0;
-            border: 1px solid transparent;
-            border-radius: 6px;
-            background: transparent;
-            color: #94a3b8;
-            font-size: 11px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: background .12s, color .12s, border-color .12s;
-        }
-
-        .fb-row-more-btn:hover {
-            background: #f1f5f9;
-            color: #334155;
-            border-color: #e2e8f0;
-        }
-
-        .fb-dropdown-menu {
-            /* position/top/left are set inline in JS at open time, fixed to
-                       the viewport — see the .fb-row-more-btn click handler. Using
-                       position:fixed (not absolute-within-the-row) means the menu
-                       can never end up rendered behind the toolbar/table header
-                       above it, and can be flipped to open upward near the bottom
-                       of the page without being clipped or hidden by anything. */
-            position: fixed;
-            min-width: 190px;
-            padding: 6px;
-            border: 1px solid #e9eef6;
-            border-radius: 14px;
-            background: #fff;
-            box-shadow: 0 8px 28px rgba(37, 52, 71, .13);
-            display: none;
-            z-index: 1050;
-        }
-
-        .fb-dropdown-menu.open {
-            display: block;
-            animation: fbDropdownIn .12s ease;
-        }
-
-        @keyframes fbDropdownIn {
-            from {
-                opacity: 0;
-                transform: translateY(-4px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fb-dropdown-menu button {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            width: 100%;
-            border: 0;
-            background: transparent;
-            text-align: left;
-            padding: 6px 8px;
-            border-radius: 9px;
-            font-size: 13px;
-            font-weight: 500;
-            color: #334155;
-            cursor: pointer;
-            transition: background .12s, color .12s;
-        }
-
-        .fb-dropdown-menu button:hover {
-            background: #f1f5f9;
-            color: #253447;
-        }
-
-        .fb-dropdown-menu .fb-dd-icon {
-            width: 26px;
-            height: 26px;
-            min-width: 26px;
-            border-radius: 7px;
-            background: rgba(37, 52, 71, .07);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11.5px;
-            color: #475569;
-            flex-shrink: 0;
-        }
-
-        .fb-dropdown-menu .fb-dd-divider {
-            margin: 4px 6px;
-            border: 0;
-            border-top: 1px solid #f1f5f9;
-        }
-
-        .fb-dropdown-menu button.fb-dd-danger {
-            color: #dc2626;
-        }
-
-        .fb-dropdown-menu button.fb-dd-danger:hover {
-            background: #fef2f2;
-            color: #b91c1c;
-        }
-
-        .fb-dropdown-menu button.fb-dd-danger .fb-dd-icon {
-            background: rgba(220, 38, 38, .1);
-            color: #dc2626;
-        }
-
-        /* Inline rename — replaces the name in place, click outside (blur)
-                   saves, Escape cancels, same convention as Windows Explorer. */
-        .fb-inline-rename-input {
-            flex: 1 1 auto;
-            min-width: 80px;
-            max-width: 320px;
-            font-size: 13px;
-            font-family: inherit;
-            color: #1e293b;
-            padding: 3px 7px;
-            border: 1.5px solid #2563eb;
-            border-radius: 6px;
-            outline: none;
-            background: #fff;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, .12);
-        }
-
         .fb-bulk-row {
             display: flex;
             align-items: center;
@@ -692,11 +449,7 @@
         }
 
         .fb-col-actions {
-            /* Fits the widest case (favorite + download + view + delete —
-                       4 × 30px buttons + 6px gaps + cell padding) with a little
-                       breathing room, instead of leaving ~60-90px of dead space
-                       after the left-aligned icons. */
-            width: 170px;
+            width: 100px;
         }
 
         .sortable {
@@ -723,7 +476,7 @@
             }
 
             .fb-col-actions {
-                width: 160px;
+                width: 100px;
             }
         }
     </style>
@@ -792,6 +545,78 @@
         .fb-modal-body {
             padding: 14px
         }
+
+        .fb-download-dialog {
+            position: relative;
+            width: 360px;
+            max-width: calc(100% - 32px);
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 20px 60px rgba(2, 6, 23, 0.4);
+            z-index: 2100;
+            padding: 26px 24px 22px;
+            text-align: center;
+        }
+
+        .fb-download-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 12px;
+            border-radius: 50%;
+            background: #eff6ff;
+            color: #2563eb;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fb-download-title {
+            margin: 0 0 14px;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .fb-download-progress {
+            height: 8px;
+            background: #f1f5f9;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .fb-download-progress-bar {
+            height: 100%;
+            width: 0%;
+            border-radius: 6px;
+            background: linear-gradient(90deg, #06b6d4, #2563eb);
+            transition: width .15s ease;
+        }
+
+        .fb-download-percent {
+            margin: 8px 0 16px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+        }
+
+        .fb-download-cancel {
+            height: 34px;
+            padding: 0 18px;
+            border: 1.5px solid #dbe4f0;
+            border-radius: 8px;
+            background: #fff;
+            color: #64748b;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .fb-download-cancel:hover {
+            border-color: #cbd5e1;
+            color: #334155;
+            background: #f8fafc;
+        }
     </style>
     <style>
         /* Favorited button state */
@@ -807,12 +632,6 @@
             color: #b45309;
         }
 
-        /* Delete button */
-        .fb-row-btn[data-action="delete"]:hover {
-            border-color: #fca5a5;
-            background: #fef2f2;
-            color: #dc2626;
-        }
 
         /* Highlight checked rows — target td to override Bootstrap 5's cell-level bg */
         #fbListBody tr.fb-row-selected>td {
@@ -821,12 +640,6 @@
 
         #fbListBody tr.fb-row-selected:hover>td {
             background-color: #bfdbfe !important;
-        }
-
-        /* Row whose "more options" menu is currently open — same blue as
-                   the checkbox-selected highlight. */
-        #fbListBody tr.fb-row-menu-open>td {
-            background-color: #dbeafe !important;
         }
 
         .fb-grid-card.fb-row-selected {
@@ -1173,7 +986,6 @@
             const csrfToken = '{{ csrf_token() }}';
 
             const toggleFavoriteUrl = '{{ url('/toggle-favorite') }}';
-            const copyMultipleUrl = '{{ route('folders.mcopyMultiple') }}';
             const downloadMultipleUrl = '{{ route('folders.mdownloadMultiple') }}';
 
             let activeView = localStorage.getItem('fb_view_mode') === 'grid' ? 'grid' : 'list';
@@ -1206,13 +1018,6 @@
                 $('#fbGoToRootBtn i')
                     .toggleClass('fa-minus', !collapsed)
                     .toggleClass('fa-plus', collapsed);
-            }
-
-            function currentFolderCanAdd() {
-                // Root-level project folders are only created via Projects
-                // Management, never from this file browser — so Add File/Add
-                // Folder never show on the top-level listing.
-                return currentFolder().id !== rootFolder.id;
             }
 
             function currentFolder() {
@@ -1393,9 +1198,8 @@
                         fa,
                         cls
                     } = getItemIcon(item);
-                    const showTreeView = !isFolder;
-                    const treeNameHtml = showTreeView ?
-                        `<a href="/files/${btoa(String(item.id))}/preview" class="fb-name-link" title="${item.name}">${item.name}</a>` :
+                    const treeNameHtml = !isFolder ?
+                        `<a href="javascript:void(0)" class="fb-name-link fb-tree-download-trigger" data-id="${item.id}" data-type="${item.type}" title="${item.name}">${item.name}</a>` :
                         `<span title="${item.name}">${item.name}</span>`;
 
                     const row = `
@@ -1444,29 +1248,9 @@
                     const clickable = row.type === 'folder' ? 'fb-item-folder' : '';
 
                     const selectedCls = selected.has(row.id) ? 'fb-row-selected' : '';
-                    // Only the type-based distinctions remain: "view" opens a
-                    // file preview, "add" puts something inside a folder.
-                    const showView = row.type === 'file';
-                    const showAdd = row.type === 'folder';
-                    const nameHtml = showView ?
-                        `<a href="/files/${btoa(String(row.id))}/preview" class="fb-name-link fb-name-text">${row.name}</a>` :
+                    const nameHtml = row.type === 'file' ?
+                        `<a href="javascript:void(0)" class="fb-name-link fb-name-text" data-action="download" data-id="${row.id}" title="Download">${row.name}</a>` :
                         `<span class="fb-name-text">${row.name}</span>`;
-                    const rowMenuHtml = `
-                        <div class="fb-dropdown fb-row-more ms-auto">
-                            <button type="button" class="fb-row-more-btn" title="More options" data-id="${row.id}">
-                                <i class="fa-solid fa-chevron-down"></i>
-                            </button>
-                            <div class="fb-dropdown-menu">
-                                ${showAdd ? `<button type="button" data-action="row-add-file" data-id="${row.id}"><span class="fb-dd-icon"><i class="fa-solid fa-file-arrow-up"></i></span><span>Add File</span></button>` : ''}
-                                ${showAdd ? `<button type="button" data-action="row-add-folder" data-id="${row.id}"><span class="fb-dd-icon"><i class="fa-solid fa-folder-plus"></i></span><span>Add Folder</span></button>` : ''}
-                                <button type="button" data-action="download" data-id="${row.id}"><span class="fb-dd-icon"><i class="fa-solid fa-download"></i></span><span>Download</span></button>
-                                <button type="button" data-action="copy" data-id="${row.id}"><span class="fb-dd-icon"><i class="fa-solid fa-copy"></i></span><span>Copy</span></button>
-                                <button type="button" data-action="rename" data-id="${row.id}"><span class="fb-dd-icon"><i class="fa-solid fa-pen"></i></span><span>Rename</span></button>
-                                <button type="button" data-action="move" data-id="${row.id}"><span class="fb-dd-icon"><i class="fa-solid fa-arrows-up-down-left-right"></i></span><span>Move</span></button>
-                                <button type="button" class="fb-dd-danger" data-action="delete" data-id="${row.id}"><span class="fb-dd-icon"><i class="fa-solid fa-trash-can"></i></span><span>Delete</span></button>
-                            </div>
-                        </div>`;
-
                     return `
                     <tr class="${clickable} ${selectedCls}" data-open-id="${row.id}">
                         <td>
@@ -1476,7 +1260,6 @@
                             <div class="fb-name-cell">
                                 <i class="fa-solid ${icon} ${iconCls}"></i>
                                 ${nameHtml}
-                                ${rowMenuHtml}
                             </div>
                         </td>
                         <td>${row.size}</td>
@@ -1488,8 +1271,6 @@
                                     <i class="${starClass} fa-star"></i>
                                 </button>
                                 <button type="button" class="fb-row-btn" data-action="download" data-id="${row.id}" title="Download"><i class="fa-solid fa-download"></i></button>
-                                <button type="button" class="fb-row-btn" data-action="delete" data-id="${row.id}" title="Delete"><i class="fa-solid fa-trash-can"></i></button>
-                                ${showView ? `<button type="button" class="fb-row-btn" data-action="view" data-id="${row.id}" title="View"><i class="fa-solid fa-eye"></i></button>` : ''}
                             </div>
                         </td>
                     </tr>
@@ -1513,28 +1294,11 @@
                     const clickable = row.type === 'folder' ? 'fb-item-folder' : '';
 
                     const gridSelectedCls = selected.has(row.id) ? 'fb-row-selected' : '';
-                    const showView = row.type === 'file';
-                    const showAdd = row.type === 'folder';
-                    const gridMenuHtml = `
-                        <div class="fb-dropdown fb-row-more">
-                            <button type="button" class="fb-row-more-btn" title="More options" data-id="${row.id}">
-                                <i class="fa-solid fa-ellipsis-vertical"></i>
-                            </button>
-                            <div class="fb-dropdown-menu">
-                                ${showAdd ? `<button type="button" data-action="row-add-file" data-id="${row.id}"><span class="fb-dd-icon"><i class="fa-solid fa-file-arrow-up"></i></span><span>Add File</span></button>` : ''}
-                                ${showAdd ? `<button type="button" data-action="row-add-folder" data-id="${row.id}"><span class="fb-dd-icon"><i class="fa-solid fa-folder-plus"></i></span><span>Add Folder</span></button>` : ''}
-                                <button type="button" data-action="download" data-id="${row.id}"><span class="fb-dd-icon"><i class="fa-solid fa-download"></i></span><span>Download</span></button>
-                                <button type="button" data-action="copy" data-id="${row.id}"><span class="fb-dd-icon"><i class="fa-solid fa-copy"></i></span><span>Copy</span></button>
-                                <button type="button" data-action="rename" data-id="${row.id}"><span class="fb-dd-icon"><i class="fa-solid fa-pen"></i></span><span>Rename</span></button>
-                                <button type="button" data-action="move" data-id="${row.id}"><span class="fb-dd-icon"><i class="fa-solid fa-arrows-up-down-left-right"></i></span><span>Move</span></button>
-                                <button type="button" class="fb-dd-danger" data-action="delete" data-id="${row.id}"><span class="fb-dd-icon"><i class="fa-solid fa-trash-can"></i></span><span>Delete</span></button>
-                            </div>
-                        </div>`;
-                    const gridNameHtml = showView ?
-                        `<a href="/files/${btoa(String(row.id))}/preview" class="fb-name-link">${row.name}</a>` :
+                    const gridNameHtml = row.type === 'file' ?
+                        `<a href="javascript:void(0)" class="fb-name-link" data-action="download" data-id="${row.id}" title="Download">${row.name}</a>` :
                         row.name;
-                    const gridIconHtml = showView ?
-                        `<a href="/files/${btoa(String(row.id))}/preview"><i class="fa-solid ${icon} ${iconCls}"></i></a>` :
+                    const gridIconHtml = row.type === 'file' ?
+                        `<a href="javascript:void(0)" data-action="download" data-id="${row.id}" title="Download"><i class="fa-solid ${icon} ${iconCls}"></i></a>` :
                         `<i class="fa-solid ${icon} ${iconCls}"></i>`;
                     return `
                     <div class="col-xl-3 col-lg-4 col-md-6">
@@ -1547,7 +1311,6 @@
                                     <button type="button" class="${favBtnCls}" data-action="favorite" data-id="${row.id}">
                                         <i class="${starClass} fa-star"></i>
                                     </button>
-                                    ${gridMenuHtml}
                                 </div>
                             </div>
 
@@ -1561,8 +1324,6 @@
 
                             <div class="fb-row-actions mt-2">
                                 <button type="button" class="fb-row-btn" data-action="download" data-id="${row.id}" title="Download"><i class="fa-solid fa-download"></i></button>
-                                <button type="button" class="fb-row-btn" data-action="delete" data-id="${row.id}" title="Delete"><i class="fa-solid fa-trash-can"></i></button>
-                                ${showView ? `<button type="button" class="fb-row-btn" data-action="view" data-id="${row.id}" title="View"><i class="fa-solid fa-eye"></i></button>` : ''}
                             </div>
                         </div>
                     </div>
@@ -1594,10 +1355,6 @@
                 renderTree();
                 savePathToUrl();
 
-                // Add File/Add Folder don't apply to the top-level listing.
-                const canAdd = currentFolderCanAdd();
-                $('[data-action="add-file-folder"]').toggle(canAdd);
-                $('[data-action="add-folder-toolbar"]').toggle(canAdd);
                 $('#fbBulkDownloadBtn').show();
             }
 
@@ -1644,23 +1401,6 @@
                 }
             });
 
-            function humanSize(bytes) {
-                if (!bytes || bytes === 0) return '0 B';
-                const units = ['B', 'KB', 'MB', 'GB', 'TB'];
-                const i = Math.floor(Math.log(bytes) / Math.log(1024));
-                return (bytes / Math.pow(1024, i)).toFixed(i ? 1 : 0) + ' ' + units[i];
-            }
-
-            function formatModified(d) {
-                const mm = String(d.getMonth() + 1).padStart(2, '0');
-                const dd = String(d.getDate()).padStart(2, '0');
-                const yy = d.getFullYear();
-                const hh = String(d.getHours() % 12 || 12).padStart(2, '0');
-                const min = String(d.getMinutes()).padStart(2, '0');
-                const ap = d.getHours() < 12 ? 'AM' : 'PM';
-                return `${mm}/${dd}/${yy} ${hh}:${min} ${ap}`;
-            }
-
             function findNodeById(node, id) {
                 if (String(node.id) === String(id)) return node;
                 for (const child of (node.children || [])) {
@@ -1699,345 +1439,6 @@
                     setExpandedToCurrentPath();
                 }
             }
-
-            function bubbleSizeUp(fromId, addedBytes) {
-                function walk(node) {
-                    if (String(node.id) === String(fromId)) {
-                        node.sizeValue = (node.sizeValue || 0) + addedBytes;
-                        node.size = humanSize(node.sizeValue);
-                        return true;
-                    }
-                    for (const child of (node.children || [])) {
-                        if (walk(child)) {
-                            node.sizeValue = (node.sizeValue || 0) + addedBytes;
-                            node.size = humanSize(node.sizeValue);
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-                walk(rootFolder);
-            }
-
-            function injectNodes(nodes, parentId) {
-                const target = findNodeById(rootFolder, parentId);
-                if (!target) return;
-                nodes.forEach(n => {
-                    const exists = (target.children || []).some(c => String(c.id) === String(n.id));
-                    if (!exists) {
-                        target.children = target.children || [];
-                        target.children.push(n);
-                        bubbleSizeUp(parentId, n.sizeValue || 0);
-                    }
-                });
-                renderAll();
-            }
-
-            // upload modal handlers (inline uploader)
-            let modalUploadParentId = null;
-            let modalUploadIsRoot = false;
-            let modalFiles = [];
-
-            function resetModalUploader() {
-                modalFiles = [];
-                $('#uploadList').empty();
-                $('#totalCount').text('0 files');
-                $('#btnUpload').prop('disabled', false);
-            }
-
-            function openUploadModal(parentId, isRoot) {
-                modalUploadParentId = parentId || '';
-                modalUploadIsRoot = !!isRoot;
-                resetModalUploader();
-                $('#uploadModal').removeClass('d-none').attr('aria-hidden', 'false');
-                $('body').css('overflow', 'hidden');
-            }
-
-            function closeUploadModal() {
-                resetModalUploader();
-                modalUploadParentId = null;
-                modalUploadIsRoot = false;
-                $('#uploadModal').addClass('d-none').attr('aria-hidden', 'true');
-                $('body').css('overflow', '');
-            }
-
-            $(document).on('click', '[data-action="upload"]', function(e) {
-                e.preventDefault();
-                const id = $(this).data('id');
-                openUploadModal(id);
-            });
-
-            $(document).on('click', '[data-action="add-file-folder"]', function(e) {
-                e.preventDefault();
-                const isRoot = pathStack.length === 1;
-                const id = currentFolder() && currentFolder().id ? currentFolder().id : '';
-                openUploadModal(id, isRoot);
-            });
-
-            $(document).on('click', '[data-action="add-folder-toolbar"]', function(e) {
-                e.preventDefault();
-                const isRoot = pathStack.length === 1;
-                const id = currentFolder() && currentFolder().id ? currentFolder().id : '';
-                openCreateFolderModal(id, isRoot);
-            });
-
-            $('#uploadModalClose, .fb-modal-backdrop').on('click', function() {
-                closeUploadModal();
-            });
-
-            // embedded uploader logic
-            (function() {
-                const drop = document.getElementById('uploadDropzone');
-                const input = document.getElementById('uploadInput');
-                const folderInput = document.getElementById('uploadInputFolder');
-                const btnSelect = document.getElementById('btnSelect');
-                const btnSelectFolder = document.getElementById('btnSelectFolder');
-                const btnUpload = document.getElementById('btnUpload');
-                const btnClear = document.getElementById('btnClear');
-                const listEl = document.getElementById('uploadList');
-                const totalCountEl = document.getElementById('totalCount');
-
-                function renderList() {
-                    listEl.innerHTML = '';
-                    modalFiles.forEach(item => {
-                        const id = item.id;
-                        const f = item.file;
-                        const el = document.createElement('div');
-                        el.className = 'upload-item';
-
-                        const thumb = document.createElement('div');
-                        thumb.className = 'upload-thumb';
-
-                        if (f.type && f.type.startsWith('image/')) {
-                            const img = document.createElement('img');
-                            img.src = URL.createObjectURL(f);
-                            img.style.width = '100%';
-                            img.style.height = '100%';
-                            img.style.objectFit = 'cover';
-                            thumb.appendChild(img);
-                        } else {
-                            thumb.innerHTML =
-                                '<i class="fa-solid fa-file" style="color:#64748b;font-size:18px"></i>';
-                        }
-
-                        const meta = document.createElement('div');
-                        meta.className = 'upload-meta';
-                        meta.innerHTML =
-                            `<div class="name">${f.name}</div><div class="size">${humanSize(f.size)}</div><div class="upload-progress"><i style="width:${item.progress || 0}%"></i></div>`;
-
-                        const actions = document.createElement('div');
-                        actions.className = 'actions';
-
-                        const removeBtn = document.createElement('button');
-                        if (item.progress >= 100) {
-                            removeBtn.className = 'upload-done';
-                            removeBtn.textContent = 'Uploaded';
-                            removeBtn.disabled = true;
-                        } else {
-                            removeBtn.className = 'upload-remove';
-                            removeBtn.textContent = 'Remove';
-                            removeBtn.addEventListener('click', () => {
-                                modalFiles = modalFiles.filter(x => x.id !== id);
-                                renderList();
-                                updateCount();
-                            });
-                        }
-
-                        actions.appendChild(removeBtn);
-
-                        el.appendChild(thumb);
-                        el.appendChild(meta);
-                        el.appendChild(actions);
-
-                        listEl.appendChild(el);
-                    });
-                }
-
-                function updateCount() {
-                    totalCountEl.textContent = `${modalFiles.length} file${modalFiles.length!==1?'s':''}`;
-                }
-
-                function addFiles(fileList) {
-                    const start = modalFiles.length ? modalFiles[modalFiles.length - 1].id + 1 : 1;
-                    Array.from(fileList).forEach((f, i) => {
-                        modalFiles.push({
-                            id: start + i,
-                            file: f,
-                            progress: 0
-                        });
-                    });
-                    renderList();
-                    updateCount();
-                }
-
-                drop && drop.addEventListener('click', () => input.click());
-                btnSelect && btnSelect.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    input.click();
-                });
-
-                btnSelectFolder && btnSelectFolder.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    folderInput && folderInput.click();
-                });
-
-                input && input.addEventListener('change', (e) => {
-                    if (e.target.files && e.target.files.length) {
-                        addFiles(e.target.files);
-                        e.target.value = '';
-                    }
-                });
-
-                folderInput && folderInput.addEventListener('change', (e) => {
-                    if (e.target.files && e.target.files.length) {
-                        addFiles(e.target.files);
-                        e.target.value = '';
-                    }
-                });
-
-                drop && drop.addEventListener('dragenter', (e) => {
-                    e.preventDefault();
-                    drop.classList.add('dragover');
-                });
-                drop && drop.addEventListener('dragover', (e) => {
-                    e.preventDefault();
-                    drop.classList.add('dragover');
-                });
-                drop && drop.addEventListener('dragleave', (e) => {
-                    e.preventDefault();
-                    drop.classList.remove('dragover');
-                });
-                drop && drop.addEventListener('drop', (e) => {
-                    e.preventDefault();
-                    drop.classList.remove('dragover');
-                    if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) {
-                        addFiles(e.dataTransfer.files);
-                    }
-                });
-
-                btnClear && btnClear.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    modalFiles = [];
-                    renderList();
-                    updateCount();
-                });
-
-                function uploadOne(item) {
-                    return new Promise((resolve) => {
-                        const xhr = new XMLHttpRequest();
-                        const fd = new FormData();
-                        fd.append('file', item.file);
-                        if (modalUploadParentId) fd.append('parent_id', modalUploadParentId);
-                        if (modalUploadIsRoot) fd.append('parent_type', 'drive');
-                        const url = '/files/store';
-                        xhr.open('POST', url, true);
-                        const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute(
-                            'content');
-                        if (token) xhr.setRequestHeader('X-CSRF-TOKEN', token);
-
-                        xhr.upload.onprogress = function(e) {
-                            if (e.lengthComputable) {
-                                const pct = Math.round((e.loaded / e.total) * 100);
-                                item.progress = pct;
-                                renderList();
-                            }
-                        };
-
-                        xhr.onload = function() {
-                            item.progress = 100;
-                            renderList();
-                            resolve({
-                                status: xhr.status,
-                                response: xhr.responseText
-                            });
-                        };
-                        xhr.onerror = function() {
-                            item.progress = 0;
-                            renderList();
-                            resolve({
-                                status: xhr.status || 500
-                            });
-                        };
-                        xhr.send(fd);
-                    });
-                }
-
-                async function uploadAll() {
-                    if (!modalFiles.length) return;
-                    btnUpload.disabled = true;
-                    const uploadResults = [];
-                    for (const item of modalFiles) {
-                        if (item.progress >= 100) continue;
-                        const res = await uploadOne(item);
-                        if (res) uploadResults.push({
-                            item,
-                            res
-                        });
-                    }
-                    btnUpload.disabled = false;
-
-                    // Inject newly uploaded files into the tree without page reload
-                    uploadResults.forEach(({
-                        item,
-                        res
-                    }) => {
-                        try {
-                            const data = JSON.parse(res.response);
-                            const parentId = data.parent_db_id || modalUploadParentId;
-                            const now = new Date();
-                            (data.results || []).forEach(r => {
-                                if (r.folder_id && r.response && r.status >= 200 && r
-                                    .status < 300) {
-                                    const sp = r.response;
-                                    const name = sp.name || item.file.name || '';
-                                    const ext = name.includes('.') ? name.split('.').pop()
-                                        .toLowerCase() : '';
-                                    const fileSize = sp.size || item.file.size || 0;
-                                    injectNodes([{
-                                        id: r.folder_id,
-                                        type: 'file',
-                                        ext: ext,
-                                        name: name,
-                                        parentId: sp.parentReference ? sp
-                                            .parentReference.id : null,
-                                        size: humanSize(fileSize),
-                                        sizeValue: fileSize,
-                                        modified: formatModified(now),
-                                        modifiedTs: Math.floor(now.getTime() /
-                                            1000),
-                                        creator: '',
-                                        favorite: false,
-                                        downloadUrl: sp[
-                                            '@microsoft.graph.downloadUrl'
-                                        ] || null,
-                                        webUrl: sp.webUrl || null,
-                                        children: [],
-                                    }], parentId);
-                                }
-                            });
-                        } catch (e) {}
-                    });
-
-                    setTimeout(() => {
-                        $('#uploadModal').addClass('d-none').attr('aria-hidden', 'true');
-                        modalFiles = [];
-                        renderList();
-                        updateCount();
-                        showToast('All files uploaded successfully', 'success');
-                    }, 800);
-                }
-
-                btnUpload && btnUpload.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    uploadAll();
-                });
-
-                // export for debugging
-                window._fbModalUpload = {
-                    addFiles: addFiles,
-                    files: modalFiles
-                };
-            })();
 
             $('#fbSearchInput').on('input', function() {
                 query = $(this).val().trim();
@@ -2148,6 +1549,86 @@
                 renderAll();
             });
 
+            // ── Progress-bar download (replaces window.open — avoids the
+            // new-tab-redirects-then-downloads flow for large zips, and
+            // shows real percentage progress off the response body). ──
+            let activeDownloadXhr = null;
+
+            function startDownload(url, suggestedName) {
+                const $modal = $('#fbDownloadModal');
+                const $bar = $('#fbDownloadProgressBar');
+                const $percent = $('#fbDownloadPercent');
+                const $title = $('#fbDownloadTitle');
+
+                $title.text('Preparing download…');
+                $bar.css('width', '0%');
+                $percent.text('0%');
+                $modal.removeClass('d-none');
+
+                const xhr = new XMLHttpRequest();
+                activeDownloadXhr = xhr;
+                xhr.open('GET', url, true);
+                xhr.responseType = 'blob';
+
+                xhr.onprogress = function(e) {
+                    $title.text('Downloading…');
+                    if (e.lengthComputable) {
+                        const pct = Math.round((e.loaded / e.total) * 100);
+                        $bar.css('width', pct + '%');
+                        $percent.text(pct + '%');
+                    }
+                };
+
+                xhr.onload = function() {
+                    activeDownloadXhr = null;
+
+                    if (xhr.status < 200 || xhr.status >= 300) {
+                        $modal.addClass('d-none');
+                        alert('Download failed. Please try again.');
+                        return;
+                    }
+
+                    $bar.css('width', '100%');
+                    $percent.text('100%');
+
+                    let filename = suggestedName || 'download';
+                    const disposition = xhr.getResponseHeader('Content-Disposition');
+                    if (disposition) {
+                        const match = disposition.match(/filename\*?=(?:UTF-8'')?"?([^";]+)"?/i);
+                        if (match && match[1]) {
+                            filename = decodeURIComponent(match[1]);
+                        }
+                    }
+
+                    const blobUrl = window.URL.createObjectURL(xhr.response);
+                    const a = document.createElement('a');
+                    a.href = blobUrl;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    setTimeout(() => window.URL.revokeObjectURL(blobUrl), 1000);
+
+                    setTimeout(() => $modal.addClass('d-none'), 300);
+                };
+
+                xhr.onerror = function() {
+                    activeDownloadXhr = null;
+                    $modal.addClass('d-none');
+                    alert('Download failed. Please try again.');
+                };
+
+                xhr.send();
+            }
+
+            $('#fbDownloadCancelBtn').on('click', function() {
+                if (activeDownloadXhr) {
+                    activeDownloadXhr.abort();
+                    activeDownloadXhr = null;
+                }
+                $('#fbDownloadModal').addClass('d-none');
+            });
+
             $('#fbBulkDownloadBtn').on('click', function() {
                 const ids = collectAllSelectedIds();
 
@@ -2157,69 +1638,20 @@
                 }
 
                 const url = downloadMultipleUrl + '?ids=' + encodeURIComponent(ids.join(','));
-                window.open(url, '_blank');
+                startDownload(url, 'download.zip');
             });
 
-            function deleteDriveItem(id, name) {
-                Swal.fire({
-                    title: 'Delete Item?',
-                    html: '<div class="swal-theme-icon" style="background:#fee2e2;color:#dc2626;"><i class="fa-solid fa-trash"></i></div>"<strong>' +
-                        name + '</strong>" will be permanently removed.',
-                    width: '380px',
-                    showCancelButton: true,
-                    confirmButtonColor: '#dc2626',
-                    confirmButtonText: 'Yes, delete',
-                    cancelButtonText: 'Cancel',
-                    customClass: {
-                        popup: 'swal-theme'
-                    },
-                    reverseButtons: true,
-                }).then(function(result) {
-                    if (!result.isConfirmed) return;
+            $(document).on('click', '.fb-tree-download-trigger', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
 
-                    $.ajax({
-                        url: '/folders/' + id,
-                        method: 'POST',
-                        data: {
-                            _token: csrfToken,
-                            _method: 'DELETE'
-                        },
-                        success: function() {
-                            // Remove from the in-memory tree
-                            const parent = currentFolder();
-                            if (parent.children) {
-                                parent.children = parent.children.filter(c => c.id !== id);
-                            }
-                            selected.delete(id);
-                            renderAll();
-                            showToast('Deleted successfully', 'success');
-                        },
-                        error: function() {
-                            showToast('Failed to delete item.', 'danger');
-                        }
-                    });
-                });
-            }
-
-            $(document).on('click', '[data-action="delete"]', function() {
                 const id = Number($(this).data('id'));
-                const row = currentItems().find(item => item.id === id);
-                if (!row) return;
-                deleteDriveItem(id, row.name);
-            });
+                const type = $(this).data('type');
+                const node = findNodeById(rootFolder, id);
+                if (!node) return;
 
-            $(document).on('click', '[data-action="view"]', function() {
-                const id = Number($(this).data('id'));
-                const row = currentItems().find((item) => item.id === id);
-
-                if (!row || !row.webUrl) {
-                    alert('View not available for this item.');
-                    return;
-                }
-
-                var webUrl = '/files/' + btoa(row.id) + '/preview';
-
-                window.open(webUrl, '_blank');
+                const webUrl = '/files/' + btoa(String(id)) + '/download/' + type;
+                startDownload(webUrl, node.name);
             });
 
             $(document).on('click', '[data-action="download"]', function() {
@@ -2231,9 +1663,18 @@
                     return;
                 }
 
+                // A folder isn't a single file on disk — it has to go
+                // through the zip-download endpoint (same one the toolbar's
+                // Bulk Download button uses), not the single-file route.
+                if (row.type === 'folder') {
+                    const url = downloadMultipleUrl + '?ids=' + encodeURIComponent(String(row.id));
+                    startDownload(url, row.name + '.zip');
+                    return;
+                }
+
                 var webUrl = '/files/' + btoa(row.id) + '/download/' + row.type;
 
-                window.open(webUrl, '_blank');
+                startDownload(webUrl, row.name);
 
             });
 
@@ -2273,31 +1714,7 @@
                 }
 
                 const url = downloadMultipleUrl + '?ids=' + encodeURIComponent(String(current.id));
-                window.open(url, '_blank');
-            });
-
-            $('[data-action="copy-current"]').on('click', function() {
-                const current = currentFolder();
-
-                if (!current || !current.id) {
-                    alert('No folder selected.');
-                    return;
-                }
-
-                $.ajax({
-                    url: copyMultipleUrl,
-                    method: 'POST',
-                    data: {
-                        _token: csrfToken,
-                        ids: [current.id]
-                    },
-                    success: function(res) {
-                        alert(res.message || 'Folder copied successfully.');
-                    },
-                    error: function(xhr) {
-                        alert(xhr.responseJSON?.message || 'Failed to copy folder.');
-                    }
-                });
+                startDownload(url, current.name + '.zip');
             });
 
             $('[data-action="favorite-current"]').on('click', function() {
@@ -2362,51 +1779,6 @@
                 }
             });
 
-            {{-- Row-level "more" dropdown (Copy/Rename/Move) — one per row,
-                 targeted via its own .fb-dropdown wrapper rather than an id,
-                 since every row renders the same markup. --}}
-            $(document).on('click', '.fb-row-more-btn', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-
-                const $menu = $(this).siblings('.fb-dropdown-menu');
-                const opening = !$menu.hasClass('open');
-
-                closeMenus();
-                if (opening) {
-                    $menu.addClass('open');
-                    const $icon = $(this).find('i');
-                    if ($icon.hasClass('fa-chevron-down')) {
-                        $icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
-                    }
-                    $(this).closest('tr, .fb-grid-card').addClass('fb-row-menu-open');
-
-                    // Positioned fixed to the viewport (not absolute within
-                    // the row) so it always renders above every other page
-                    // element and can never end up clipped/hidden behind the
-                    // toolbar or table header. Flips upward when the menu
-                    // wouldn't fully fit below the button, so every option is
-                    // visible right away without needing to scroll first.
-                    const btnRect = this.getBoundingClientRect();
-                    const menuWidth = $menu.outerWidth();
-                    const menuHeight = $menu.outerHeight();
-
-                    const fitsBelow = btnRect.bottom + 8 + menuHeight <= window.innerHeight;
-                    const top = fitsBelow ?
-                        btnRect.bottom + 8 :
-                        Math.max(8, btnRect.top - 8 - menuHeight);
-                    const left = Math.max(8, Math.min(
-                        btnRect.right - menuWidth,
-                        window.innerWidth - menuWidth - 8
-                    ));
-
-                    $menu.css({
-                        top: top + 'px',
-                        left: left + 'px'
-                    });
-                }
-            });
-
             // A fixed-position menu doesn't move with the page, so leaving
             // it open through a scroll/resize would visually detach it from
             // the button that opened it — simplest correct behavior is to
@@ -2456,452 +1828,6 @@
                 selected.clear();
                 updateBreadcrumb();
                 renderAll();
-            });
-
-            // ── Row "more" dropdown actions (Add File / Add Folder) — Download
-            //    reuses the same [data-action="download"] handler the Actions
-            //    column button already uses. Copy/Rename/Move aren't wired up
-            //    yet (static only). ──────────────────────────────────────────
-            $(document).on('click', '[data-action="row-add-file"]', function(e) {
-                e.stopPropagation();
-                closeMenus();
-                const id = Number($(this).data('id'));
-                const row = currentItems().find(item => item.id === id);
-                if (!row) return;
-                openUploadModal(row.id, false);
-            });
-
-            $(document).on('click', '[data-action="row-add-folder"]', function(e) {
-                e.stopPropagation();
-                closeMenus();
-                const id = Number($(this).data('id'));
-                const row = currentItems().find(item => item.id === id);
-                if (!row) return;
-                openCreateFolderModal(row.id);
-            });
-
-            // ── Create Folder modal ───────────────────────────────────────────
-            const createFolderUrl = '{{ route('folders.store') }}';
-            let createFolderParentId = null;
-            let createFolderIsRoot = false;
-
-            function openCreateFolderModal(parentId, isRoot) {
-                createFolderParentId = parentId || '';
-                createFolderIsRoot = !!isRoot;
-                $('#newFolderName').val('');
-                $('#createFolderModal').removeClass('d-none').attr('aria-hidden', 'false');
-                $('body').css('overflow', 'hidden');
-                setTimeout(() => $('#newFolderName').focus(), 80);
-            }
-
-            function closeCreateFolderModal() {
-                createFolderParentId = null;
-                createFolderIsRoot = false;
-                $('#createFolderModal').addClass('d-none').attr('aria-hidden', 'true');
-                $('body').css('overflow', '');
-            }
-
-            $('#createFolderModalClose, #createFolderCancel').on('click', closeCreateFolderModal);
-            $('#createFolderModal .fb-modal-backdrop').on('click', closeCreateFolderModal);
-
-            $('#createFolderConfirm').on('click', function() {
-                const name = $('#newFolderName').val().trim();
-                if (!name) {
-                    $('#newFolderName').focus();
-                    return;
-                }
-
-                $(this).prop('disabled', true).html(
-                    '<i class="fa-solid fa-spinner fa-spin me-1"></i> Creating…');
-
-                const savedParentId = createFolderParentId;
-                const savedIsRoot = createFolderIsRoot;
-                $.ajax({
-                    url: createFolderUrl,
-                    method: 'POST',
-                    data: {
-                        _token: csrfToken,
-                        name: name,
-                        parent_id: createFolderParentId || '',
-                        parent_type: createFolderIsRoot ? 'drive' : 'folder',
-                    },
-                    success: function(res) {
-                        closeCreateFolderModal();
-                        showToast('Folder created successfully', 'success');
-                        if (res.folder && savedParentId) {
-                            injectNodes([res.folder], savedParentId);
-                        }
-                    },
-                    error: function(xhr) {
-                        alert(xhr.responseJSON?.message || 'Failed to create folder.');
-                    },
-                    complete: function() {
-                        $('#createFolderConfirm').prop('disabled', false).html(
-                            '<i class="fa-solid fa-folder-plus"></i> Create Folder');
-                    }
-                });
-            });
-
-            // Allow Enter key to submit the folder name
-            $('#newFolderName').on('keydown', function(e) {
-                if (e.key === 'Enter') $('#createFolderConfirm').trigger('click');
-            });
-
-            // ── Inline rename (click outside / blur saves, Escape cancels —
-            //    same convention as Windows Explorer) ──────────────────────────
-            const renameItemUrl = '{{ route('folders.mrename') }}';
-            let renamingId = null; // guards against starting a second inline edit at once
-
-            function startInlineRename(id, row, $trigger) {
-                if (renamingId !== null) return;
-                const $nameCell = $trigger.closest('tr').find('.fb-name-cell');
-                const $nameText = $nameCell.find('.fb-name-text');
-                if (!$nameText.length) return;
-
-                closeMenus();
-                renamingId = id;
-                const originalName = row.name;
-
-                const $input = $(
-                        '<input type="text" class="fb-inline-rename-input" autocomplete="off" spellcheck="false">')
-                    .val(originalName);
-                $nameText.hide();
-                $input.insertAfter($nameText);
-                $input.trigger('focus');
-
-                // Pre-select just the base name (not the extension) for
-                // files — matches Windows Explorer's rename convention.
-                const dot = row.type === 'file' ? originalName.lastIndexOf('.') : -1;
-                if (dot > 0) {
-                    $input[0].setSelectionRange(0, dot);
-                } else {
-                    $input.trigger('select');
-                }
-
-                let settled = false;
-
-                function finish(shouldSave) {
-                    if (settled) return;
-                    settled = true;
-                    renamingId = null;
-                    const newName = $input.val().trim();
-                    $input.remove();
-                    $nameText.show();
-
-                    if (!shouldSave || !newName || newName === originalName) {
-                        return;
-                    }
-
-                    $.ajax({
-                        url: renameItemUrl,
-                        method: 'POST',
-                        data: {
-                            _token: csrfToken,
-                            id: id,
-                            name: newName
-                        },
-                        success: function(res) {
-                            showToast('Renamed successfully', 'success');
-                            const node = findNodeById(rootFolder, id);
-                            if (node) node.name = res.folder?.name ?? newName;
-                            renderAll();
-                        },
-                        error: function(xhr) {
-                            showToast(xhr.responseJSON?.message || 'Failed to rename.', 'danger');
-                            renderAll(); // revert the row back to its original name
-                        }
-                    });
-                }
-
-                $input.on('blur', function() {
-                    finish(true);
-                });
-                $input.on('keydown', function(e) {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        $input.trigger('blur');
-                    } else if (e.key === 'Escape') {
-                        e.preventDefault();
-                        finish(false);
-                    }
-                });
-            }
-
-            $(document).on('click', '[data-action="rename"]', function(e) {
-                e.stopPropagation();
-                const id = Number($(this).data('id'));
-                const row = currentItems().find((item) => item.id === id);
-                if (!row) return;
-                startInlineRename(id, row, $(this));
-            });
-
-            // ── "Copy to..." / "Move to..." destination picker — one shared
-            //    modal/tree for both actions, distinguished by pickerAction ──
-            const copyItemUrl = '{{ route('folders.copyItem') }}';
-            const moveItemUrl = '{{ route('folders.moveItem') }}';
-            let copySourceId = null;
-            let copySelectedDestId = null; // set once the user picks a destination folder in the tree
-            let pickerAction = 'copy'; // 'copy' | 'move'
-            let pickerExcludedIds = new Set(); // self + (for folders) every descendant folder id
-
-            const PICKER_LABELS = {
-                copy: {
-                    icon: 'fa-copy',
-                    title: 'Copy to&hellip;',
-                    btn: 'Copy Here',
-                    verb: 'Copying',
-                    done: 'Copied successfully',
-                    fail: 'Failed to copy item.'
-                },
-                move: {
-                    icon: 'fa-arrows-up-down-left-right',
-                    title: 'Move to&hellip;',
-                    btn: 'Move Here',
-                    verb: 'Moving',
-                    done: 'Moved successfully',
-                    fail: 'Failed to move item.'
-                },
-            };
-
-            function collectDescendantFolderIds(node, into) {
-                (node.children || []).forEach((child) => {
-                    if (child.type !== 'folder') return;
-                    into.add(child.id);
-                    collectDescendantFolderIds(child, into);
-                });
-                return into;
-            }
-
-            // A node "matches" a search if its own name does, or any
-            // descendant (folder or file, any depth) does — lets a query
-            // find a deeply-nested folder, or a file that hints at which
-            // folder to pick, without navigating the tree by hand.
-            function cpNodeMatchesQuery(node, q) {
-                if (node.name.toLowerCase().includes(q)) return true;
-                return (node.children || []).some(child => cpNodeMatchesQuery(child, q));
-            }
-
-            function buildCopyPickerRows(node, query) {
-                const q = (query || '').trim().toLowerCase();
-                // No search: folders only, collapsed (original behavior).
-                // While searching: files are considered too (shown for
-                // context, never selectable), and only items that match —
-                // by their own name or a matching descendant — are shown.
-                const candidates = (node.children || []).filter(c => q ? true : c.type === 'folder');
-                const visible = candidates.filter(c => !q || cpNodeMatchesQuery(c, q));
-                if (!visible.length) return '';
-
-                return visible.map((item) => {
-                    if (item.type === 'file') {
-                        return `
-                            <div class="cp-node">
-                                <div class="cp-item cp-disabled cp-file-row">
-                                    <span class="cp-spacer"></span>
-                                    <i class="fa-solid fa-file cp-file-icon"></i>
-                                    <span class="cp-name">${item.name}</span>
-                                </div>
-                            </div>
-                        `;
-                    }
-
-                    const childHtml = buildCopyPickerRows(item, q);
-                    const hasChildren = childHtml.length > 0;
-                    // Can't target the item itself, or — when moving a folder —
-                    // any of its own sub-folders (that would be moving it inside
-                    // its own descendant, which would orphan the sub-tree).
-                    const disabled = pickerExcludedIds.has(item.id);
-                    const selfMatches = q && item.name.toLowerCase().includes(q);
-                    const selected = item.id === copySelectedDestId;
-
-                    return `
-                        <div class="cp-node${(q && hasChildren) || selected ? ' open' : ''}" data-cp-id="${item.id}">
-                            <div class="cp-item${disabled ? ' cp-disabled' : ''}${selfMatches ? ' cp-match' : ''}${selected ? ' cp-selected' : ''}" data-cp-select="${item.id}">
-                                ${hasChildren
-                                    ? `<button type="button" class="cp-toggle" data-cp-toggle="${item.id}"><i class="fa-solid fa-chevron-right"></i></button>`
-                                    : `<span class="cp-spacer"></span>`}
-                                <i class="fa-solid fa-folder cp-folder-icon"></i>
-                                <span class="cp-name">${item.name}</span>
-                            </div>
-                            ${hasChildren ? `<div class="cp-children">${childHtml}</div>` : ''}
-                        </div>
-                    `;
-                }).join('');
-            }
-
-            function renderCopyPickerTree(query) {
-                const q = (query || '').trim().toLowerCase();
-                const rows = buildCopyPickerRows(rootFolder, q);
-                $('#copyItemTree').html(rows || '<p class="cp-empty">No matching folders found.</p>');
-            }
-
-            function openCopyItemModal(id, name, action) {
-                copySourceId = id;
-                copySelectedDestId = null;
-                pickerAction = action;
-
-                const sourceNode = findNodeById(rootFolder, id);
-                pickerExcludedIds = new Set([id]);
-                if (sourceNode && sourceNode.type === 'folder') {
-                    collectDescendantFolderIds(sourceNode, pickerExcludedIds);
-                }
-
-                const labels = PICKER_LABELS[action];
-                $('#copyItemHeaderIcon i').attr('class', 'fa-solid ' + labels.icon);
-                $('#copyItemTitle').html(labels.title);
-                $('#copyItemSub').text(`Choose a destination for "${name}".`);
-                $('#copyItemSearch').val('');
-                renderCopyPickerTree('');
-                $('#copyItemConfirm').prop('disabled', true).html(
-                    `<i class="fa-solid ${labels.icon}"></i> ${labels.btn}`);
-
-                $('#copyItemModal').removeClass('d-none').attr('aria-hidden', 'false');
-                $('body').css('overflow', 'hidden');
-            }
-
-            $('#copyItemSearch').on('input', function() {
-                renderCopyPickerTree($(this).val());
-            });
-
-            function closeCopyItemModal() {
-                copySourceId = null;
-                $('#copyItemModal').addClass('d-none').attr('aria-hidden', 'true');
-                $('body').css('overflow', '');
-            }
-
-            $('#copyItemModalClose, #copyItemCancel').on('click', closeCopyItemModal);
-            $('#copyItemModal .fb-modal-backdrop').on('click', closeCopyItemModal);
-
-            $('#copyItemTree').on('click', '.cp-toggle', function(e) {
-                e.stopPropagation();
-                $(this).closest('.cp-node').toggleClass('open');
-            });
-
-            $('#copyItemTree').on('click', '[data-cp-select]', function() {
-                if ($(this).hasClass('cp-disabled')) return;
-                $('#copyItemTree .cp-item').removeClass('cp-selected');
-                $(this).addClass('cp-selected');
-                copySelectedDestId = $(this).data('cp-select');
-                $('#copyItemConfirm').prop('disabled', false);
-            });
-
-            $(document).on('click', '[data-action="copy"], [data-action="move"]', function(e) {
-                e.stopPropagation();
-                closeMenus();
-                const id = Number($(this).data('id'));
-                const row = currentItems().find((item) => item.id === id);
-                if (!row) return;
-                openCopyItemModal(id, row.name, $(this).data('action'));
-            });
-
-            // Radio-button choice shown only when the destination already has
-            // an item with the same name — Overwrite replaces it (and every
-            // child underneath it) outright, Create New keeps both by
-            // auto-suffixing " (Copy)", "(Copy)(Copy)", ... until it's unique.
-            function showCopyConflictDialog(existingName) {
-                return Swal.fire({
-                    title: 'Item already exists',
-                    html: `
-                        <p style="margin:0 0 14px;font-size:13.5px;color:#475569;">
-                            "<strong>${existingName}</strong>" already exists in this location.
-                        </p>
-                        <div style="display:flex;flex-direction:column;gap:10px;text-align:left;">
-                            <label style="display:flex;align-items:center;gap:9px;cursor:pointer;">
-                                <input type="radio" name="cpConflict" value="overwrite" checked>
-                                <span>Overwrite &mdash; replace it (and everything inside it)</span>
-                            </label>
-                            <label style="display:flex;align-items:center;gap:9px;cursor:pointer;">
-                                <input type="radio" name="cpConflict" value="rename">
-                                <span>Create New &mdash; keep both, add "(Copy)" to the name</span>
-                            </label>
-                        </div>
-                    `,
-                    width: '420px',
-                    showCancelButton: true,
-                    confirmButtonColor: '#253447',
-                    confirmButtonText: 'Continue',
-                    cancelButtonText: 'Cancel',
-                    customClass: {
-                        popup: 'swal-theme'
-                    },
-                    reverseButtons: true,
-                    preConfirm: () => document.querySelector('input[name="cpConflict"]:checked').value,
-                }).then((result) => result.isConfirmed ? result.value : null);
-            }
-
-            // Splices the moved node out of its old parent's children and
-            // into the new one — the subtree it carries (already loaded
-            // client-side) doesn't need re-fetching, only its own position
-            // in the tree changes.
-            function moveNodeInTree(id, oldParentId, newParentId, newName) {
-                const oldParent = findNodeById(rootFolder, oldParentId ?? rootFolder.id);
-                const newParent = findNodeById(rootFolder, newParentId ?? rootFolder.id);
-                if (!oldParent || !newParent) {
-                    renderAll();
-                    return;
-                }
-
-                const idx = (oldParent.children || []).findIndex(c => c.id === id);
-                if (idx === -1) {
-                    renderAll();
-                    return;
-                }
-
-                const [node] = oldParent.children.splice(idx, 1);
-                node.name = newName;
-                newParent.children = newParent.children || [];
-                newParent.children.push(node);
-                selected.delete(id);
-                renderAll();
-            }
-
-            function performPickerAction(sourceId, destId, conflictResolution) {
-                const labels = PICKER_LABELS[pickerAction];
-                const $btn = $('#copyItemConfirm');
-                $btn.prop('disabled', true).html(
-                    `<i class="fa-solid fa-spinner fa-spin me-1"></i> ${labels.verb}…`);
-
-                $.ajax({
-                    url: pickerAction === 'move' ? moveItemUrl : copyItemUrl,
-                    method: 'POST',
-                    data: {
-                        _token: csrfToken,
-                        id: sourceId,
-                        destination_id: destId === 'root' ? '' : destId,
-                        conflict_resolution: conflictResolution || '',
-                    },
-                    success: function(res) {
-                        closeCopyItemModal();
-                        showToast(labels.done, 'success');
-                        if (pickerAction === 'move') {
-                            moveNodeInTree(res.id, res.oldParentId, res.destinationId, res.name);
-                        } else {
-                            const targetParentId = res.destinationId ?? rootFolder.id;
-                            injectNodes([res.item], targetParentId);
-                        }
-                    },
-                    error: function(xhr) {
-                        if (xhr.status === 409 && xhr.responseJSON?.conflict) {
-                            showCopyConflictDialog(xhr.responseJSON.existingName).then((choice) => {
-                                if (choice) {
-                                    performPickerAction(sourceId, destId, choice);
-                                } else {
-                                    $btn.prop('disabled', false).html(
-                                        `<i class="fa-solid ${labels.icon}"></i> ${labels.btn}`
-                                    );
-                                }
-                            });
-                            return;
-                        }
-                        showToast(xhr.responseJSON?.message || labels.fail, 'danger');
-                        $btn.prop('disabled', false).html(
-                            `<i class="fa-solid ${labels.icon}"></i> ${labels.btn}`);
-                    }
-                });
-            }
-
-            $('#copyItemConfirm').on('click', function() {
-                if (!copySourceId || !copySelectedDestId) return;
-                performPickerAction(copySourceId, copySelectedDestId, null);
             });
 
             // Toggles the sidebar tree collapsed/expanded — the page/current

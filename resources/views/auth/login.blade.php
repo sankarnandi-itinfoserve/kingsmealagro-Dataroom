@@ -6,6 +6,15 @@
 
     <div class="rg-wrap">
 
+        {{-- Logo (mobile/tablet only — the branding panel with the logo is hidden below the lg breakpoint).
+             The logo artwork has near-white text baked in for the dark branding background, so it needs
+             a matching dark panel here too or the wordmark is invisible on the white card. --}}
+        <div class="rg-mobile-logo d-lg-none text-center">
+            <div class="rg-mobile-logo-box">
+                <img src="{{ asset('admin/images/kingsmeal-agro-logo.png') }}" alt="Logo" class="rg-mobile-logo-img">
+            </div>
+        </div>
+
         {{-- Header --}}
         <div class="rg-header">
             <div class="rg-header-icon"><i class="fa-solid fa-right-to-bracket"></i></div>
@@ -109,6 +118,28 @@
             box-shadow: 0 8px 40px rgba(37, 52, 71, .13);
             overflow: hidden;
             width: 100%;
+        }
+
+        /* ── Mobile logo (hidden at lg+, where the branding panel takes over) ── */
+        .rg-mobile-logo {
+            padding: 20px 20px 0;
+        }
+
+        .rg-mobile-logo-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a2737 0%, #253447 100%);
+            border-radius: 12px;
+            padding: 14px 20px;
+            max-width: 100%;
+        }
+
+        .rg-mobile-logo-img {
+            width: 220px;
+            max-width: 100%;
+            height: auto;
+            display: block;
         }
 
         /* ── Header ── */
