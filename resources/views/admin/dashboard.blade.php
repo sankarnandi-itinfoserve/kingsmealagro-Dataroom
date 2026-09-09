@@ -34,7 +34,7 @@
                 @endif
                 <div>
                     <div class="db-hero-title">{{ $greeting }}, <span>{{ $firstName }}</span></div>
-                    <div class="db-hero-sub">Welcome to NLG-VDR</div>
+                    <div class="db-hero-sub">Welcome to Kingsmealagro Data Room</div>
                 </div>
             </div>
 
@@ -60,18 +60,15 @@
     </div>
 
     {{-- ══════════════════════════════════════════════════════════
-     RECENT PROJECTS  +  ARCHIVE BOX
+     RECENT PROJECTS
 ══════════════════════════════════════════════════════════ --}}
     @php
-        // Archived project count is computed in DashboardController (a project
-        // is a root folder under the Documents drive; archived == soft-deleted).
-        $archivedCount = $archivedProjects;
-        $top2Projects = $recentProjects->take(2);
+        $topProjects = $recentProjects->take(3);
     @endphp
     <div class="mb-4">
         <div class="row g-3">
-            {{-- Project card 1 & 2 --}}
-            @forelse ($top2Projects as $proj)
+            {{-- Project cards --}}
+            @forelse ($topProjects as $proj)
                 @php
                     $ago = $proj->updated_at?->diffForHumans() ?? '—';
                     $cnt = $fileCounts[$proj->id] ?? 0;
@@ -102,22 +99,10 @@
                 <div class="col-12 col-sm-6 col-xl-3">
                     <div class="db-pcard db-pcard-empty"></div>
                 </div>
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="db-pcard db-pcard-empty"></div>
+                </div>
             @endforelse
-
-            {{-- Archive box --}}
-            <div class="col-12 col-sm-6 col-xl-3">
-                <a href="{{ route('projects.archived') }}" class="db-archive-card db-archive-card-closed">
-                    <div class="db-archive-card-row">
-                        <div>
-                            <div class="db-archive-card-count">{{ $archivedCount }}</div>
-                            <div class="db-pcard-name">Closed {{ Str::plural('project', $archivedCount) }}</div>
-                        </div>
-                    </div>
-                    <div class="db-archive-card-link">
-                        Browse archive <i class="fa-solid fa-arrow-right ms-1" style="font-size:10px;"></i>
-                    </div>
-                </a>
-            </div>
 
             {{-- New Project CTA --}}
             <div class="col-12 col-sm-6 col-xl-3">
@@ -125,7 +110,7 @@
                     <div class="db-newproj-row">
                         <div class="db-newproj-icon"><i class="fa-solid fa-plus"></i></div>
                         <div>
-                            <div class="db-newproj-title">Ready for a New Project?</div>
+                            <div class="db-newproj-title">Ready for a Document?</div>
                             <div class="db-newproj-sub">Start a new data room</div>
                         </div>
                     </div>

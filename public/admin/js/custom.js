@@ -12,18 +12,33 @@ document.addEventListener('DOMContentLoaded', function () {
     const closeBtn = document.getElementById('closeSidebar');
     const sidebar = document.querySelector('.sidebar');
 
+    // ".sidebar.active" means two different things depending on viewport:
+    // on desktop/tablet (>=992px) it collapses the sidebar to an icon rail,
+    // on mobile (<992px) it opens the off-canvas drawer. The saved
+    // preference is only meaningful for the desktop collapsed state — on
+    // mobile the drawer must always start closed, regardless of what was
+    // last saved while on desktop, otherwise the menu opens by itself
+    // before the hamburger is ever clicked.
+    const isDesktop = () => window.matchMedia('(min-width: 992px)').matches;
+
     // apply saved state
-    sidebar.classList.toggle(
-        'active',
-        localStorage.getItem('sidebarState') === 'active'
-    );
+    if (isDesktop()) {
+        sidebar.classList.toggle(
+            'active',
+            localStorage.getItem('sidebarState') === 'active'
+        );
+    } else {
+        sidebar.classList.remove('active');
+    }
 
     const handleToggleClick = () => {
         sidebar.classList.toggle('active');
-        localStorage.setItem(
-            'sidebarState',
-            sidebar.classList.contains('active') ? 'active' : 'inactive'
-        );
+        if (isDesktop()) {
+            localStorage.setItem(
+                'sidebarState',
+                sidebar.classList.contains('active') ? 'active' : 'inactive'
+            );
+        }
     };
 
     toggleBtn?.addEventListener('click', handleToggleClick);
@@ -31,7 +46,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     closeBtn?.addEventListener('click', () => {
         sidebar.classList.remove('active');
-        localStorage.setItem('sidebarState', 'inactive');
+        if (isDesktop()) {
+            localStorage.setItem('sidebarState', 'inactive');
+        }
     });
 
     // Collapsed-sidebar hover flyouts (Settings, Shared Folders, etc.) used
