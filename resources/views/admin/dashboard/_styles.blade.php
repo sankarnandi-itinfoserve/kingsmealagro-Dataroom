@@ -981,4 +981,29 @@
             font-size: 11px;
         }
     }
+
+    /* .db-hero-stats is a non-wrapping flex row with overflow:hidden — on a
+       phone-width screen the 4 stat chips (icon + two-line label, several
+       with fairly wide nowrap labels like "Active Projects") don't fit and
+       the rightmost chip(s) get silently clipped instead of visibly
+       overflowing. Switch to a 2x2 grid instead of trying to fit one row. */
+    @media (max-width: 480px) {
+        .db-hero-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .db-hstat-sep {
+            display: none;
+        }
+
+        .db-hstat {
+            padding: 12px 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, .1);
+        }
+
+        .db-hstat-lbl {
+            white-space: normal;
+        }
+    }
 </style>
