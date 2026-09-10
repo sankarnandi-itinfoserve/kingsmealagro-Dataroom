@@ -71,22 +71,24 @@
                     <div class="card-body p-0">
                         <div id="listView">
 
-                            <table class="table fb-table align-middle mb-0">
-                                <!-- Table Head -->
-                                <thead>
-                                    <tr>
-                                        <th class="fb-col-check"></th>
-                                        <th>Name</th>
-                                        <th style="width:100px;">Size</th>
-                                        <th style="width:160px;">Last modified</th>
-                                        <th style="width:140px;">Creator</th>
-                                        <th style="width:130px;">Action</th>
-                                    </tr>
-                                </thead>
-                                <!-- Table Body -->
-                                <tbody id="fbListBody"></tbody>
+                            <div class="table-responsive">
+                                <table class="table fb-table align-middle mb-0">
+                                    <!-- Table Head -->
+                                    <thead>
+                                        <tr>
+                                            <th class="fb-col-check"></th>
+                                            <th>Name</th>
+                                            <th style="width:100px;">Size</th>
+                                            <th style="width:160px;">Last modified</th>
+                                            <th style="width:140px;">Creator</th>
+                                            <th style="width:130px;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <!-- Table Body -->
+                                    <tbody id="fbListBody"></tbody>
 
-                            </table>
+                                </table>
+                            </div>
                         </div>
                         <!-- GRID VIEW -->
                         <div id="gridView" class="d-none">

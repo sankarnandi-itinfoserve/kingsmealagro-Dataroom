@@ -837,10 +837,15 @@
             border-color: #253447;
         }
 
+        #logDetailBody {
+            overflow-x: auto;
+        }
+
         .al-detail-table {
             width: 100%;
             font-size: 12.5px;
             border-collapse: collapse;
+            table-layout: fixed;
         }
 
         .al-detail-table th,
@@ -849,13 +854,13 @@
             border-bottom: 1px solid #eef2f7;
             text-align: left;
             vertical-align: top;
+            word-break: break-word;
         }
 
         .al-detail-table th {
-            width: 140px;
+            width: 110px;
             color: #64748b;
             font-weight: 600;
-            white-space: nowrap;
         }
 
         .al-detail-old {

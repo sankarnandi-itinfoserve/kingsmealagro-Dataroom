@@ -207,6 +207,8 @@ class UserController extends Controller
             ]);
         } catch (\Exception $e) {
 
+            Log::error('UserController::store failed: ' . $e->getMessage());
+
             return response()->json([
                 'status' => 'error',
                 'message' => 'Something went wrong',
