@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
-@section('title', 'Project Folders')
-@section('page_title', 'Project Folders')
+@section('title', 'Folders')
+@section('page_title', 'Folders')
 
 @section('content')
 
@@ -15,7 +15,7 @@
                         </button>
 
                         <nav class="fb-breadcrumb" aria-label="Breadcrumb">
-                            <a href="#" class="fb-crumb" data-level="0">Project Folders</a>
+                            <a href="#" class="fb-crumb" data-level="0">Folders</a>
                         </nav>
                     </div>
                 </div>
@@ -988,7 +988,12 @@
             const toggleFavoriteUrl = '{{ url('/toggle-favorite') }}';
             const downloadMultipleUrl = '{{ route('folders.mdownloadMultiple') }}';
 
-            let activeView = localStorage.getItem('fb_view_mode') === 'grid' ? 'grid' : 'list';
+            // Respect an explicitly-saved preference either way; otherwise
+            // default to grid on phone-width screens (easier to tap than a
+            // dense table) and list on larger screens.
+            const savedViewMode = localStorage.getItem('fb_view_mode');
+            const isMobileViewport = window.matchMedia('(max-width: 767.98px)').matches;
+            let activeView = savedViewMode ? (savedViewMode === 'grid' ? 'grid' : 'list') : (isMobileViewport ? 'grid' : 'list');
             let activeSort = {
                 key: 'name',
                 direction: 'asc'
@@ -1082,7 +1087,7 @@
             }
 
             function updateBreadcrumb() {
-                const staticPrefix = `<a href="#" class="fb-crumb" data-level="0">Project Folders</a>`;
+                const staticPrefix = `<a href="#" class="fb-crumb" data-level="0">Folders</a>`;
 
                 // Skip the root folder (index 0) when building dynamic crumbs
                 const dynamicParts = pathStack.slice(1).map((folder, idx) => {

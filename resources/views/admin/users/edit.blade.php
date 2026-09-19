@@ -56,6 +56,20 @@
                 </div>
             </div>
 
+            <div class="row g-3 mb-3">
+                <div class="col-12">
+                    <label class="ue-label">Email</label>
+                    <div class="ue-input-wrap">
+                        <i class="fa-solid fa-envelope ue-input-icon"></i>
+                        <input type="email" name="email" value="{{ old('email', $user->email) }}"
+                            class="ue-input @error('email') ue-input-err @enderror" required>
+                    </div>
+                    @error('email')
+                        <span class="ue-err">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
+
 
             {{-- Role --}}
             @php $currentRole = $user->getRoleNames()->first(); @endphp

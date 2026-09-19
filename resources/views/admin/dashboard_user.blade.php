@@ -38,7 +38,7 @@
 
             {{-- Stat chips inside hero — scoped to exactly what's been granted to this user --}}
             <div class="db-hero-stats">
-                @foreach ([['val' => $activeProjects, 'lbl' => 'Your Projects', 'icon' => 'fa-diagram-project', 'color' => '#38bdf8', 'bg' => 'rgba(56,189,248,.18)'], ['val' => $favoritesCount, 'lbl' => 'Favorites', 'icon' => 'fa-star', 'color' => '#a78bfa', 'bg' => 'rgba(167,139,250,.18)'], ['val' => $totalFiles, 'lbl' => 'Total Files', 'icon' => 'fa-file-lines', 'color' => '#fbbf24', 'bg' => 'rgba(251,191,36,.18)'], ['val' => $loginsToday, 'lbl' => 'Logins Today', 'icon' => 'fa-arrow-right-to-bracket', 'color' => '#34d399', 'bg' => 'rgba(52,211,153,.18)']] as $i => $stat)
+                @foreach ([['val' => $activeProjects, 'lbl' => 'Your Folders', 'icon' => 'fa-diagram-project', 'color' => '#38bdf8', 'bg' => 'rgba(56,189,248,.18)'], ['val' => $favoritesCount, 'lbl' => 'Favorites', 'icon' => 'fa-star', 'color' => '#a78bfa', 'bg' => 'rgba(167,139,250,.18)'], ['val' => $totalFiles, 'lbl' => 'Total Files', 'icon' => 'fa-file-lines', 'color' => '#fbbf24', 'bg' => 'rgba(251,191,36,.18)'], ['val' => $loginsToday, 'lbl' => 'Logins Today', 'icon' => 'fa-arrow-right-to-bracket', 'color' => '#34d399', 'bg' => 'rgba(52,211,153,.18)']] as $i => $stat)
                     @if ($i > 0)
                         <div class="db-hstat-sep"></div>
                     @endif
@@ -91,7 +91,7 @@
                 <div class="col-12 col-sm-6 col-xl-3">
                     <div class="db-pcard db-pcard-empty">
                         <i class="fa-solid fa-folder-open"></i>
-                        <span>No projects shared with you yet.</span>
+                        <span>No folders shared with you yet.</span>
                     </div>
                 </div>
                 <div class="col-12 col-sm-6 col-xl-3">

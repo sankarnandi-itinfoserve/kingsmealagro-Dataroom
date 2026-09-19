@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Projects Management')
-@section('page_title', 'Projects Management')
+@section('title', 'Folders Management')
+@section('page_title', 'Folders Management')
 
 @section('content')
 
@@ -13,20 +13,24 @@
                 <div>
                     <div class="fb-nav-line">
                         <nav class="fb-breadcrumb" aria-label="Breadcrumb">
-                            <span class="fb-crumb-current">Projects Management</span>
+                            <span class="fb-crumb-current">Folders Management</span>
                         </nav>
                     </div>
                 </div>
 
                 <div class="fb-header-actions">
                     <a href="{{ route('projects.create') }}" class="fb-tool-btn fb-tool-btn-primary">
-                        <i class="fa-solid fa-folder-plus"></i> Create New Project
+                        <i class="fa-solid fa-folder-plus"></i> Create New Folder
                     </a>
 
                     <div class="fb-search-wrap">
                         <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" id="projectSearchInput" placeholder="Search projects…">
+                        <input type="text" id="projectSearchInput" placeholder="Search folders…">
                     </div>
+
+                    <a href="{{ route('projects.archived') }}" class="fb-tool-btn fb-tool-btn-danger-soft">
+                        <i class="fa-solid fa-box-archive"></i> Deleted Items
+                    </a>
 
                     {{-- <div class="fb-view-toggle" role="group" aria-label="View mode">
                         <button type="button" class="fb-view-btn active" data-view="list">
@@ -42,13 +46,28 @@
             <div class="fb-layout">
                 <section class="fb-main">
 
+                    {{-- Bulk-select toolbar --}}
+                    <div class="fb-bulk-row">
+                        <label class="fb-subscribe-label">
+                            <input type="checkbox" id="projectSelectAll">
+                            Select all
+                        </label>
+                        <span class="fb-sel-badge" id="projectSelectedCount">0 selected</span>
+
+                        <span class="fb-toolbar-sep"></span>
+
+                        <button type="button" class="fb-tool-btn fb-tool-btn-danger-soft" id="projectBulkDeleteBtn">
+                            <i class="fa-solid fa-trash-can"></i> Delete Selected
+                        </button>
+                    </div>
+
                     {{-- List view --}}
                     <div id="projectListView" class="fb-view-panel">
                         <div class="table-responsive">
                             <table class="table fb-table align-middle" id="projectTable">
                                 <thead>
                                     <tr>
-                                        <th style="width:1%; white-space:nowrap;">#</th>
+                                        <th class="fb-col-check"></th>
                                         <th class="sortable col-has-filter" data-sort="name">
                                             <div class="col-th-inner">
                                                 <span>Name <i class="fa-solid fa-sort sort-icon"></i></span>
@@ -64,12 +83,12 @@
                                 <tbody id="projectListBody">
                                     @forelse ($projects as $project)
                                         <tr class="project-row" data-name="{{ strtolower($project->name) }}">
-                                            <td class="text-muted" style="font-size:13px;">{{ $projects->firstItem() + $loop->index }}</td>
+                                            <td><input type="checkbox" class="fb-row-check project-check" data-id="{{ $project->id }}"></td>
                                             <td>
                                                 <div class="fb-name-cell">
                                                     <a href="{{ route('projects.edit', $project) }}"
                                                         class="prj-name-edit-link"
-                                                        title="Edit Project">{{ $project->name }}</a>
+                                                        title="Edit Folder">{{ $project->name }}</a>
                                                 </div>
                                             </td>
                                             <td>
@@ -105,7 +124,7 @@
                                         <tr>
                                             <td colspan="5" class="text-center text-muted py-5">
                                                 <i class="fa-solid fa-diagram-project fa-2x mb-2 d-block opacity-25"></i>
-                                                No projects found.
+                                                No folders found.
                                                 <a href="{{ route('projects.create') }}">Create one now.</a>
                                             </td>
                                         </tr>
@@ -155,7 +174,7 @@
                             @empty
                                 <div class="col-12 text-center text-muted py-5">
                                     <i class="fa-solid fa-diagram-project fa-2x mb-2 d-block opacity-25"></i>
-                                    No projects found.
+                                    No folders found.
                                     <a href="{{ route('projects.create') }}">Create one now.</a>
                                 </div>
                             @endforelse
@@ -249,15 +268,6 @@
         .prj-name-edit-link:hover,
         .prj-template-edit-link:hover {
             text-decoration-color: currentColor;
-        }
-
-        /* ── Toolbar row ─────────────────────────────────────────────────────── */
-        .fb-bulk-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
         }
 
         /* ── Status filter tabs ───────────────────────────────────────────────── */
@@ -674,6 +684,19 @@
             color: #fff !important;
         }
 
+        .fb-tool-btn-danger-soft {
+            background: #fef2f2 !important;
+            border-color: #fecaca !important;
+            color: #dc2626 !important;
+            text-decoration: none !important;
+        }
+
+        .fb-tool-btn-danger-soft:hover {
+            background: #fee2e2 !important;
+            border-color: #fca5a5 !important;
+            color: #b91c1c !important;
+        }
+
     </style>
 @endpush
 
@@ -846,7 +869,7 @@
                 var form = $(this).closest('form');
                 var name = form.data('close-name');
                 Swal.fire({
-                    title: 'Close Project?',
+                    title: 'Close Folder?',
                     html: '<div class="swal-theme-icon" style="background:rgba(37,52,71,.08);color:#253447;"><i class="fa-solid fa-box-archive"></i></div>"<strong>' +
                         name + '</strong>" will be moved to the archive and become read-only.',
                     width: '380px',
@@ -868,7 +891,7 @@
                 const form = $(this).closest('form');
                 const name = form.data('delete-name');
                 Swal.fire({
-                    title: 'Delete Project?',
+                    title: 'Delete Folder?',
                     html: '<div class="swal-theme-icon" style="background:#fee2e2;color:#dc2626;"><i class="fa-solid fa-trash"></i></div>"<strong>' +
                         name + '</strong>" will be permanently removed.',
                     width: '380px',
@@ -882,6 +905,86 @@
                     reverseButtons: true,
                 }).then(function(result) {
                     if (result.isConfirmed) form.submit();
+                });
+            });
+
+            /* ── Bulk select (checkboxes + "Select all") ──────────────────────────── */
+            function updateProjectSelection() {
+                const $visible = $('.project-check:visible');
+                const checkedCount = $visible.filter(':checked').length;
+                $('#projectSelectedCount').text(checkedCount + ' selected');
+                $('#projectSelectAll').prop('checked', $visible.length > 0 && checkedCount === $visible.length);
+            }
+
+            $(document).on('change', '.project-check', updateProjectSelection);
+
+            $('#projectSelectAll').on('change', function() {
+                const checked = $(this).is(':checked');
+                $('.project-check:visible').prop('checked', checked);
+                updateProjectSelection();
+            });
+
+            function collectSelectedProjectIds() {
+                return $('.project-check:checked').map(function() {
+                    return $(this).data('id');
+                }).get();
+            }
+
+            /* ── Bulk Delete ────────────────────────────────────────────────────────── */
+            const destroyUrlTpl = "{{ route('projects.destroy', '__ID__') }}";
+            const csrfToken = "{{ csrf_token() }}";
+
+            function runBulkAction(ids, urlTpl, method, verbPast) {
+                let done = 0,
+                    failed = 0;
+
+                ids.forEach(function(id) {
+                    $.ajax({
+                        url: urlTpl.replace('__ID__', id),
+                        method: method,
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                    }).fail(function() {
+                        failed++;
+                    }).always(function() {
+                        done++;
+                        if (done === ids.length) {
+                            showToast(
+                                failed > 0 ?
+                                (failed + ' of ' + ids.length + ' item(s) failed.') :
+                                (ids.length + ' folder(s) ' + verbPast + '.'),
+                                failed > 0 ? 'danger' : 'success'
+                            );
+                            setTimeout(function() {
+                                window.location.reload();
+                            }, 900);
+                        }
+                    });
+                });
+            }
+
+            $('#projectBulkDeleteBtn').on('click', function() {
+                const ids = collectSelectedProjectIds();
+                if (!ids.length) {
+                    alert('Please select at least one folder.');
+                    return;
+                }
+
+                Swal.fire({
+                    title: 'Delete ' + ids.length + ' folder(s)?',
+                    html: '<div class="swal-theme-icon" style="background:#fee2e2;color:#dc2626;"><i class="fa-solid fa-trash"></i></div>Selected folders will be moved to the archive.',
+                    width: '380px',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc2626',
+                    confirmButtonText: 'Yes, delete them',
+                    cancelButtonText: 'Cancel',
+                    customClass: {
+                        popup: 'swal-theme'
+                    },
+                    reverseButtons: true,
+                }).then(function(result) {
+                    if (result.isConfirmed) runBulkAction(ids, destroyUrlTpl, 'DELETE', 'deleted');
                 });
             });
 

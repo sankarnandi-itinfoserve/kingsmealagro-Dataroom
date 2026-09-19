@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('title', 'Edit — ' . $project->name)
-@section('page_title', 'Edit Project')
+@section('page_title', 'Edit Folder')
 
 @section('content')
 
@@ -33,14 +33,14 @@
 
                 <div class="prj-form-card">
                     <div class="prj-form-section-header">
-                        <div class="prj-section-title">Project Details</div>
+                        <div class="prj-section-title">Folder Details</div>
                     </div>
                     <div class="prj-form-section-body">
 
                         <div class="row g-3">
                             <div class="col-12">
                                 <label class="prj-label">
-                                    Project Name <span class="text-danger">*</span>
+                                    Folder Name <span class="text-danger">*</span>
                                 </label>
                                 <input type="text" name="name"
                                     class="prj-input @error('name') is-invalid @enderror"
@@ -62,7 +62,7 @@
                             </a>
                             {{-- Delete trigger (button only — form is outside the edit form below) --}}
                             <button type="button" class="prj-danger-btn" id="deleteProjectBtn">
-                                <i class="fa-solid fa-trash me-1"></i> Delete Project
+                                <i class="fa-solid fa-trash me-1"></i> Delete Folder
                             </button>
                         </div>
 
@@ -81,7 +81,7 @@
         <div class="col-lg-6">
             <div class="prj-form-card">
                 <div class="prj-form-section-header d-flex align-items-center justify-content-between">
-                    <div class="prj-section-title">Project Folders & Files</div>
+                    <div class="prj-section-title">Folders & Files</div>
                     <div class="d-flex gap-2">
                         <button type="button" class="pft-tool-btn" id="pftExpandCollapseBtn" data-expanded="false">
                             <i class="fa-solid fa-angle-double-down"></i> Expand All
@@ -661,7 +661,7 @@
 
             $('#deleteProjectBtn').on('click', function() {
                 Swal.fire({
-                    title: 'Delete Project?',
+                    title: 'Delete Folder?',
                     html: '<div class="swal-theme-icon" style="background:#fee2e2;color:#dc2626;"><i class="fa-solid fa-trash"></i></div>"{{ addslashes($project->name) }}" will be permanently removed.',
                     width: '380px', showCancelButton: true,
                     confirmButtonColor: '#dc2626', confirmButtonText: 'Yes, delete',

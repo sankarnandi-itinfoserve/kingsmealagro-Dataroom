@@ -40,7 +40,7 @@
 
             {{-- Stat chips inside hero --}}
             <div class="db-hero-stats">
-                @foreach ([['val' => $activeProjects, 'lbl' => 'Active Projects', 'icon' => 'fa-diagram-project', 'color' => '#38bdf8', 'bg' => 'rgba(56,189,248,.18)'], ['val' => $totalUsers, 'lbl' => 'Users', 'icon' => 'fa-users', 'color' => '#a78bfa', 'bg' => 'rgba(167,139,250,.18)'], ['val' => $totalFiles, 'lbl' => 'Total Files', 'icon' => 'fa-file-lines', 'color' => '#fbbf24', 'bg' => 'rgba(251,191,36,.18)'], ['val' => $loginsToday, 'lbl' => 'Logins Today', 'icon' => 'fa-arrow-right-to-bracket', 'color' => '#34d399', 'bg' => 'rgba(52,211,153,.18)']] as $i => $stat)
+                @foreach ([['val' => $activeProjects, 'lbl' => 'Active Folders', 'icon' => 'fa-diagram-project', 'color' => '#38bdf8', 'bg' => 'rgba(56,189,248,.18)'], ['val' => $totalUsers, 'lbl' => 'Users', 'icon' => 'fa-users', 'color' => '#a78bfa', 'bg' => 'rgba(167,139,250,.18)'], ['val' => $totalFiles, 'lbl' => 'Total Files', 'icon' => 'fa-file-lines', 'color' => '#fbbf24', 'bg' => 'rgba(251,191,36,.18)'], ['val' => $loginsToday, 'lbl' => 'Logins Today', 'icon' => 'fa-arrow-right-to-bracket', 'color' => '#34d399', 'bg' => 'rgba(52,211,153,.18)']] as $i => $stat)
                     @if ($i > 0)
                         <div class="db-hstat-sep"></div>
                     @endif
@@ -93,7 +93,7 @@
                 <div class="col-12 col-sm-6 col-xl-3">
                     <div class="db-pcard db-pcard-empty">
                         <i class="fa-solid fa-folder-open"></i>
-                        <span>No active projects yet.</span>
+                        <span>No active folders yet.</span>
                     </div>
                 </div>
                 <div class="col-12 col-sm-6 col-xl-3">
@@ -164,7 +164,7 @@
                     </a>
                     <a href="{{ route('projects.create') }}" class="db-action-tile">
                         <div class="db-at-icon"><i class="fa-solid fa-diagram-project"></i></div>
-                        <div class="db-at-lbl">New Project</div>
+                        <div class="db-at-lbl">New Folder</div>
                     </a>
                 </div>
             </div>

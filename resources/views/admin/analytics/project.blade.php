@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('title', 'Analytics — ' . $project->name)
-@section('page_title', 'Project Analytics')
+@section('page_title', 'Folder Analytics')
 
 @section('content')
 
@@ -23,7 +23,7 @@
         </div>
         <div class="an-header-actions">
             <a href="{{ route('projects.edit', $project) }}" class="an-btn an-btn-ghost">
-                <i class="fa-solid fa-eye"></i> View Project
+                <i class="fa-solid fa-eye"></i> View Folder
             </a>
             <button type="button" class="an-btn an-btn-ghost" onclick="history.back()">
                 <i class="fa-solid fa-arrow-left"></i> Back
@@ -253,7 +253,7 @@
             @else
                 <div class="rol-empty">
                     <i class="fa-solid fa-clock-rotate-left"></i>
-                    <p>No activity recorded for this project yet.</p>
+                    <p>No activity recorded for this folder yet.</p>
                 </div>
             @endif
         </div>

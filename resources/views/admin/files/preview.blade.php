@@ -91,7 +91,7 @@
         @endphp
         {{-- <nav class="pv-breadcrumb" aria-label="File location">
             <a href="{{ route('shared.folders') }}" class="pv-bc-item pv-bc-home">
-                <i class="fa-solid fa-folder-tree me-1"></i>Project Folders
+                <i class="fa-solid fa-folder-tree me-1"></i>Folders
             </a>
             @foreach ($breadcrumb as $crumb)
                 <span class="pv-bc-sep"><i class="fa-solid fa-chevron-right"></i></span>

@@ -10,7 +10,7 @@
         <!-- Breadcrumb -->
 
         <div class="mb-2 text-muted small">
-            <a href="{{ route('shared.folders') }}">Project Folders</a>
+            <a href="{{ route('shared.folders') }}">Folders</a>
 
             @foreach ($breadcrumb as $crumb)
                 > <a href="{{ route('shared.folders', ['parent_id' => $crumb->id]) }}">

@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
-@section('title', ($project->name ?? 'Project') . ' — Overview')
-@section('page_title', $project->name ?? 'Project')
+@section('title', ($project->name ?? 'Folder') . ' — Overview')
+@section('page_title', $project->name ?? 'Folder')
 
 @section('content')
 
@@ -23,7 +23,7 @@
                 <span class="prj-status-badge {{ $statusCls }}">{{ $statusLabel }}</span>
             </div>
             <nav class="prj-breadcrumb mt-1">
-                <a href="{{ route('projects.index') }}">Projects Management</a>
+                <a href="{{ route('projects.index') }}">Folders Management</a>
                 <i class="fa-solid fa-chevron-right"></i>
                 <span>{{ Str::limit($project->name, 40) }}</span>
             </nav>
@@ -49,7 +49,7 @@
                 <form action="{{ route('projects.archive', $project) }}" method="POST" class="d-inline" id="archiveForm">
                     @csrf
                     <button type="button" class="prj-action-btn prj-action-btn-archive" id="archiveBtn">
-                        <i class="fa-solid fa-box-archive"></i> Archive Project
+                        <i class="fa-solid fa-box-archive"></i> Archive Folder
                     </button>
                 </form>
                 <a href="{{ route('projects.index') }}" class="prj-action-btn prj-action-btn-ghost">
@@ -64,7 +64,7 @@
         <div class="prj-readonly-banner">
             <i class="fa-solid fa-lock"></i>
             <div class="prj-readonly-body">
-                <strong>This project is archived and read-only.</strong>
+                <strong>This folder is archived and read-only.</strong>
                 Files remain accessible to permitted users.
             </div>
         </div>
@@ -666,7 +666,7 @@
         $(function() {
             $('#archiveBtn').on('click', function() {
                 Swal.fire({
-                    title: 'Close this project?',
+                    title: 'Close this folder?',
                     html: '<div class="swal-theme-icon" style="background:rgba(37,52,71,.08);color:#253447;"><i class="fa-solid fa-box-archive"></i></div>It will be moved to the archive and become read-only. You can restore it at any time.',
                     width: '380px', showCancelButton: true,
                     confirmButtonColor: '#253447', confirmButtonText: 'Yes, close it',
@@ -678,7 +678,7 @@
 
             $('#restoreBtn').on('click', function() {
                 Swal.fire({
-                    title: 'Restore this project?',
+                    title: 'Restore this folder?',
                     html: '<div class="swal-theme-icon" style="background:rgba(37,52,71,.08);color:#253447;"><i class="fa-solid fa-rotate-left"></i></div>It will be moved back to Active status.',
                     width: '380px', showCancelButton: true,
                     confirmButtonColor: '#253447', confirmButtonText: 'Yes, restore',

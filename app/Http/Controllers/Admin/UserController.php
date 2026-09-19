@@ -255,6 +255,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'fname' => 'required|string|max:255',
             'lname' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
             'avatar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
         if ($validator->fails()) {
@@ -267,6 +268,8 @@ class UserController extends Controller
         $user->fname = $request->fname;
         $user->lname = $request->lname;
         $user->displayName = $request->fname . ' ' . $request->lname;
+        $user->email = $request->email;
+        $user->replay_email = $request->email;
         if ($request->hasFile('avatar')) {
             $user->avatar = $request->file('avatar')->store('avatars', 'public');
         }

@@ -430,22 +430,9 @@
             transform: translateY(-1px);
         }
 
-        .al-stat-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--stat-bg);
-            color: var(--stat-color);
-            font-size: 14px;
-            flex-shrink: 0;
-        }
-
         .al-stat-val {
             font-size: 19px;
-            font-weight: 800;
+            font-weight: 400;
             color: #1e293b;
             line-height: 1.15;
         }
@@ -517,12 +504,11 @@
             {{-- ── Stats strip — admin-wide Activity Logs page only, not My Activity ── --}}
             @unless ($isMyActivity)
                 <div class="al-stats-strip">
-                    @foreach ([['key' => 'created', 'label' => 'Created', 'icon' => 'fa-plus', 'color' => '#15803d', 'bg' => 'rgba(21,128,61,.12)'], ['key' => 'updated', 'label' => 'Updated', 'icon' => 'fa-pen', 'color' => '#b45309', 'bg' => 'rgba(180,83,9,.12)'], ['key' => 'deleted', 'label' => 'Deleted', 'icon' => 'fa-trash', 'color' => '#b91c1c', 'bg' => 'rgba(185,28,28,.12)'], ['key' => 'restored', 'label' => 'Restored', 'icon' => 'fa-rotate-left', 'color' => '#1e40af', 'bg' => 'rgba(30,64,175,.12)'], ['key' => 'downloaded', 'label' => 'Downloaded', 'icon' => 'fa-download', 'color' => '#0369a1', 'bg' => 'rgba(3,105,161,.12)'], ['key' => 'login', 'label' => 'Login', 'icon' => 'fa-right-to-bracket', 'color' => '#047857', 'bg' => 'rgba(4,120,87,.12)'], ['key' => 'logout', 'label' => 'Logout', 'icon' => 'fa-right-from-bracket', 'color' => '#475569', 'bg' => 'rgba(71,85,105,.12)'], ['key' => 'password_changed', 'label' => 'Password Changed', 'icon' => 'fa-key', 'color' => '#6d28d9', 'bg' => 'rgba(109,40,217,.12)']] as $stat)
+                    @foreach ([['key' => 'created', 'label' => 'Created', 'color' => '#15803d', 'bg' => 'rgba(21,128,61,.12)'], ['key' => 'updated', 'label' => 'Updated', 'color' => '#b45309', 'bg' => 'rgba(180,83,9,.12)'], ['key' => 'deleted', 'label' => 'Deleted', 'color' => '#b91c1c', 'bg' => 'rgba(185,28,28,.12)'], ['key' => 'restored', 'label' => 'Restored', 'color' => '#1e40af', 'bg' => 'rgba(30,64,175,.12)'], ['key' => 'downloaded', 'label' => 'Downloaded', 'color' => '#0369a1', 'bg' => 'rgba(3,105,161,.12)'], ['key' => 'login', 'label' => 'Login', 'color' => '#047857', 'bg' => 'rgba(4,120,87,.12)'], ['key' => 'logout', 'label' => 'Logout', 'color' => '#475569', 'bg' => 'rgba(71,85,105,.12)'], ['key' => 'password_changed', 'label' => 'Password Changed', 'color' => '#6d28d9', 'bg' => 'rgba(109,40,217,.12)']] as $stat)
                         @php $isActiveStat = request('action') === $stat['key']; @endphp
                         <a href="{{ request()->fullUrlWithQuery(['action' => $isActiveStat ? null : $stat['key']]) }}"
                             class="al-stat-card {{ $isActiveStat ? 'al-stat-card-active' : '' }}"
                             style="--stat-color:{{ $stat['color'] }};--stat-bg:{{ $stat['bg'] }};">
-                            <div class="al-stat-icon"><i class="fa-solid {{ $stat['icon'] }}"></i></div>
                             <div>
                                 <div class="al-stat-val">{{ $actionCounts[$stat['key']] ?? 0 }}</div>
                                 <div class="al-stat-label">{{ $stat['label'] }}</div>
