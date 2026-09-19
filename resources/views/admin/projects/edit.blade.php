@@ -86,11 +86,14 @@
                         <button type="button" class="pft-tool-btn" id="pftExpandCollapseBtn" data-expanded="false">
                             <i class="fa-solid fa-angle-double-down"></i> Expand All
                         </button>
-                        <button type="button" class="pft-tool-btn" id="pftAddFolderBtn">
-                            <i class="fa-solid fa-folder-plus"></i> Add Folder
+                        <button type="button" class="pft-tool-btn pft-tool-btn-icon" id="pftAddFolderBtn" title="Add Folder">
+                            <i class="fa-solid fa-folder-plus" style="color:#fbbf24;"></i>
                         </button>
-                        <button type="button" class="pft-tool-btn" id="pftAddFileBtn">
-                            <i class="fa-solid fa-file-circle-plus"></i> Add File
+                        <button type="button" class="pft-tool-btn pft-tool-btn-icon" id="pftAddFileBtn" title="Add File">
+                            <i class="fa-solid fa-file-circle-plus" style="color:#38bdf8;"></i>
+                        </button>
+                        <button type="button" class="pft-tool-btn pft-tool-btn-icon" id="pftImportZipBtn" title="Import ZIP">
+                            <i class="fa-solid fa-file-zipper" style="color:#a78bfa;"></i>
                         </button>
                     </div>
                 </div>
@@ -152,6 +155,35 @@
             <div class="pft-modal-footer">
                 <button type="button" class="prj-cancel-btn" data-modal-close="pftAddFileModal">Cancel</button>
                 <button type="button" class="prj-submit-btn" id="pftAddFileConfirm">Upload</button>
+            </div>
+        </div>
+    </div>
+
+    {{-- ── Import ZIP modal ── --}}
+    <div id="pftImportZipModal" class="pft-modal-overlay d-none">
+        <div class="pft-modal">
+            <div class="pft-modal-header">
+                <span>Import ZIP</span>
+                <button type="button" class="pft-modal-close" data-modal-close="pftImportZipModal">&times;</button>
+            </div>
+            <div class="pft-modal-body">
+                <p class="pft-modal-target">Inside "<span id="pftImportZipTarget"></span>"</p>
+                <label class="prj-label">Choose ZIP File</label>
+                <label class="pft-file-drop" for="pftImportZipInput" id="pftImportZipDropZone">
+                    <input type="file" id="pftImportZipInput" class="pft-file-input-native" accept=".zip">
+                    <span class="pft-file-drop-icon"><i class="fa-solid fa-file-zipper"></i></span>
+                    <span class="pft-file-drop-text">
+                        <span class="pft-file-drop-title">Click to browse or drag a zip here</span>
+                        <span class="pft-file-drop-sub" id="pftImportZipDropSub">No file chosen</span>
+                    </span>
+                </label>
+                <p class="pft-import-zip-hint">Every folder and file inside the zip will be recreated with the same
+                    structure, nested under the folder above.</p>
+                <div class="pft-modal-error" id="pftImportZipError"></div>
+            </div>
+            <div class="pft-modal-footer">
+                <button type="button" class="prj-cancel-btn" data-modal-close="pftImportZipModal">Cancel</button>
+                <button type="button" class="prj-submit-btn" id="pftImportZipConfirm">Import</button>
             </div>
         </div>
     </div>
@@ -319,6 +351,17 @@
         }
 
         .pft-tool-btn:hover { background: rgba(255,255,255,.18); }
+
+        .pft-tool-btn-icon {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            justify-content: center;
+        }
+
+        .pft-tool-btn-icon i {
+            font-size: 15px;
+        }
 
         .pft-tree {
             font-size: 13px;
@@ -512,6 +555,28 @@
 
         .pft-row-action-btn[data-row-add-file]:hover {
             color: #0f7e93;
+        }
+
+        .pft-row-action-btn[data-row-import-zip] {
+            color: #7c3aed;
+        }
+
+        .pft-row-action-btn[data-row-import-zip]:hover {
+            color: #5b21b6;
+        }
+
+        .pft-row-action-btn[data-row-delete] {
+            color: #dc2626;
+        }
+
+        .pft-row-action-btn[data-row-delete]:hover {
+            color: #991b1b;
+        }
+
+        .pft-import-zip-hint {
+            font-size: 11.5px;
+            color: #94a3b8;
+            margin: 10px 0 0;
         }
 
         .pft-children {
@@ -744,6 +809,27 @@
                 openModal('pftAddFileModal');
             });
 
+            $('#pftImportZipBtn').on('click', function() {
+                addTargetFolderId = projectId;
+                $('#pftImportZipInput').val('');
+                $('#pftImportZipDropSub').text('No file chosen');
+                $('#pftImportZipError').text('');
+                $('#pftImportZipTarget').text(projectName);
+                openModal('pftImportZipModal');
+            });
+
+            $(document).on('click', '[data-row-import-zip]', function(e) {
+                e.stopPropagation();
+                addTargetFolderId = $(this).data('row-import-zip');
+                $('#pftImportZipInput').val('');
+                $('#pftImportZipDropSub').text('No file chosen');
+                $('#pftImportZipError').text('');
+                $('.pft-item-active').removeClass('pft-item-active');
+                $(this).closest('.pft-item').addClass('pft-item-active');
+                $('#pftImportZipTarget').text($(this).closest('.pft-item').find('.pft-name').first().text().trim());
+                openModal('pftImportZipModal');
+            });
+
             $('[data-modal-close]').on('click', function() {
                 closeModal($(this).data('modal-close'));
             });
@@ -836,6 +922,90 @@
                     $('#pftAddFileError').text(msg);
                     if (typeof showToast === 'function') showToast(msg, 'danger');
                     $btn.prop('disabled', false).html('<i class="fa fa-cloud-arrow-up"></i> Upload');
+                });
+            });
+
+            $('#pftImportZipInput').on('change', function() {
+                const file = this.files && this.files[0];
+                $('#pftImportZipDropSub').text(file ? file.name : 'No file chosen');
+            });
+
+            /* ── Import ZIP ────────────────────────────────────────────────────── */
+            $('#pftImportZipConfirm').on('click', function() {
+                const file = $('#pftImportZipInput')[0].files[0];
+                if (!file) {
+                    $('#pftImportZipError').text('Please choose a zip file.');
+                    return;
+                }
+                const formData = new FormData();
+                formData.append('zip', file);
+                formData.append('parent_id', addTargetFolderId);
+                formData.append('_token', csrfToken);
+
+                const $btn = $(this).prop('disabled', true).html(
+                    '<i class="fa fa-spinner fa-spin"></i> Importing…');
+                $.ajax({
+                    url: '{{ route('folders.importZip') }}',
+                    method: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                }).done(function(res) {
+                    if (res && res.success) {
+                        reloadWithToast('Zip imported successfully.', 'success');
+                    } else {
+                        var msg = (res && res.message) || 'Could not import the zip.';
+                        $('#pftImportZipError').text(msg);
+                        if (typeof showToast === 'function') showToast(msg, 'danger');
+                        $btn.prop('disabled', false).html('<i class="fa fa-file-zipper"></i> Import');
+                    }
+                }).fail(function(xhr) {
+                    var msg = xhr.responseJSON?.message || 'Could not import the zip.';
+                    $('#pftImportZipError').text(msg);
+                    if (typeof showToast === 'function') showToast(msg, 'danger');
+                    $btn.prop('disabled', false).html('<i class="fa fa-file-zipper"></i> Import');
+                });
+            });
+
+            /* ── Delete row (file or folder) with SweetAlert ─────────────────────── */
+            $(document).on('click', '[data-row-delete]', function(e) {
+                e.stopPropagation();
+                const id = $(this).data('row-delete');
+                const name = $(this).data('row-delete-name');
+                const type = $(this).data('row-delete-type');
+                const isFolder = type === 'folder';
+
+                Swal.fire({
+                    title: isFolder ? 'Delete Folder?' : 'Delete File?',
+                    html: '<div class="swal-theme-icon" style="background:#fee2e2;color:#dc2626;"><i class="fa-solid fa-trash"></i></div>"<strong>' +
+                        name + '</strong>" will be permanently removed' +
+                        (isFolder ? ', along with everything inside it.' : '.'),
+                    width: '380px',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc2626',
+                    confirmButtonText: 'Yes, delete',
+                    cancelButtonText: 'Cancel',
+                    customClass: {
+                        popup: 'swal-theme'
+                    },
+                    reverseButtons: true,
+                }).then(function(result) {
+                    if (!result.isConfirmed) return;
+                    $.ajax({
+                        url: '{{ route('folders.destroy', '__ID__') }}'.replace('__ID__', id),
+                        method: 'DELETE',
+                        data: { _token: csrfToken },
+                    }).done(function(res) {
+                        if (res && res.success) {
+                            reloadWithToast((isFolder ? 'Folder' : 'File') + ' deleted successfully.', 'success');
+                        } else {
+                            var msg = (res && res.message) || 'Could not delete this item.';
+                            if (typeof showToast === 'function') showToast(msg, 'danger');
+                        }
+                    }).fail(function(xhr) {
+                        var msg = xhr.responseJSON?.message || 'Could not delete this item.';
+                        if (typeof showToast === 'function') showToast(msg, 'danger');
+                    });
                 });
             });
         });

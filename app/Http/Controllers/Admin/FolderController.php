@@ -256,6 +256,34 @@ class FolderController extends Controller
         }
     }
 
+    /**
+     * Imports an uploaded zip's folder/file structure directly under an
+     * existing folder (the "Add Folder"/"Add File" tree on the Edit Folder
+     * page, or any sub-folder in it) — same recursive import used when a
+     * new project is created from a zip, via ZipFolderImporter.
+     */
+    public function importZip(Request $request)
+    {
+        try {
+            $request->validate([
+                'zip'       => 'required|file|mimes:zip',
+                'parent_id' => 'required|integer',
+            ]);
+
+            $parent = Folder::find($request->parent_id);
+            if (!$parent || $parent->type !== 'folder') {
+                return response()->json(['success' => false, 'message' => 'Invalid destination folder.'], 422);
+            }
+
+            \App\Services\ZipFolderImporter::importInto($request->file('zip'), $parent->id, auth()->id());
+
+            return response()->json(['success' => true, 'message' => 'Zip imported successfully.']);
+        } catch (\Exception $e) {
+            Log::error('FolderController::importZip failed: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Something went wrong while importing the zip.'], 500);
+        }
+    }
+
     // ✏ Rename
     public function update(Request $request, $id)
     {
