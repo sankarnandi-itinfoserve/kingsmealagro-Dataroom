@@ -42,7 +42,8 @@
                     <div class="ue-input-wrap">
                         <i class="fa-solid fa-envelope ue-input-icon"></i>
                         <input type="email" name="email" value="{{ old('email') }}"
-                            class="ue-input @error('email') ue-input-err @enderror" required>
+                            class="ue-input @error('email') ue-input-err @enderror" required autocomplete="off"
+                            readonly onfocus="this.removeAttribute('readonly')">
                     </div>
                     @error('email') <span class="ue-err">{{ $message }}</span> @enderror
                 </div>
@@ -73,13 +74,21 @@
                     <div class="ue-input-wrap">
                         <i class="fa-solid fa-lock ue-input-icon"></i>
                         <input type="password" name="password" id="cuPassword"
-                            class="ue-input ue-input-has-toggle @error('password') ue-input-err @enderror" required>
-                        <button type="button" class="ue-toggle-pass" tabindex="-1"
-                            onclick="toggleUePasswordField('cuPassword', this)">
-                            <i class="fa-solid fa-eye"></i>
-                        </button>
+                            class="ue-input ue-input-has-toggle @error('password') ue-input-err @enderror" required
+                            autocomplete="new-password" readonly onfocus="this.removeAttribute('readonly')">
+                        <div class="ue-pass-actions">
+                            <button type="button" class="ue-toggle-pass" id="cuGenPassBtn" tabindex="-1"
+                                title="Generate password" onclick="generateUePassword()">
+                                <i class="fa-solid fa-shuffle"></i>
+                            </button>
+                            <button type="button" class="ue-toggle-pass" id="cuTogglePassBtn" tabindex="-1"
+                                title="Show/hide password" onclick="toggleUePasswordField('cuPassword', this)">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
                     </div>
                     @error('password') <span class="ue-err">{{ $message }}</span> @enderror
+                    <small class="ue-hint">Click <i class="fa-solid fa-shuffle"></i> to generate a strong password.</small>
                 </div>
 
                 {{-- Avatar --}}
@@ -113,6 +122,57 @@
         input.type = showing ? 'password' : 'text';
         icon.classList.toggle('fa-eye', showing);
         icon.classList.toggle('fa-eye-slash', !showing);
+    }
+
+    function generateUePassword() {
+        var input = document.getElementById('cuPassword');
+        if (!input) return;
+
+        // Ambiguous-looking characters (0/O, 1/l/I) are left out so an admin
+        // reading the generated password aloud/copying it by hand doesn't
+        // mistype it.
+        var sets = [
+            'abcdefghjkmnpqrstuvwxyz',
+            'ABCDEFGHJKLMNPQRSTUVWXYZ',
+            '23456789',
+            '!@#$%^&*-_=+?',
+        ];
+        var all = sets.join('');
+        var length = 14;
+
+        var randomIndex = function(max) {
+            var buf = new Uint32Array(1);
+            (window.crypto || window.msCrypto).getRandomValues(buf);
+            return buf[0] % max;
+        };
+        var pick = function(charset) {
+            return charset.charAt(randomIndex(charset.length));
+        };
+
+        // Guarantee at least one char from each set, then fill the rest.
+        var chars = sets.map(pick);
+        while (chars.length < length) chars.push(pick(all));
+
+        // Shuffle so the guaranteed characters aren't always up front.
+        for (var i = chars.length - 1; i > 0; i--) {
+            var j = randomIndex(i + 1);
+            var tmp = chars[i];
+            chars[i] = chars[j];
+            chars[j] = tmp;
+        }
+
+        input.value = chars.join('');
+        input.type = 'text';
+
+        var toggleBtn = document.getElementById('cuTogglePassBtn');
+        if (toggleBtn) {
+            var icon = toggleBtn.querySelector('i');
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        }
+
+        input.focus();
+        input.select();
     }
 </script>
 
@@ -246,14 +306,20 @@
     }
 
     .ue-input-has-toggle {
-        padding-right: 38px;
+        padding-right: 66px;
+    }
+
+    .ue-pass-actions {
+        position: absolute;
+        right: 6px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        align-items: center;
+        gap: 2px;
     }
 
     .ue-toggle-pass {
-        position: absolute;
-        right: 8px;
-        top: 50%;
-        transform: translateY(-50%);
         background: none;
         border: none;
         padding: 4px 6px;

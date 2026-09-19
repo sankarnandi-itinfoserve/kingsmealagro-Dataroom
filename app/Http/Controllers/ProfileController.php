@@ -52,9 +52,18 @@ class ProfileController extends Controller
             $validated = $request->validate([
                 'fname' => ['required', 'string', 'max:255'],
                 'lname' => ['required', 'string', 'max:255'],
+                'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
             ]);
 
-            $user->fill($validated);
+            $user->fill([
+                'fname' => $validated['fname'],
+                'lname' => $validated['lname'],
+            ]);
+
+            if ($request->hasFile('avatar')) {
+                $user->avatar = $request->file('avatar')->store('avatars', 'public');
+            }
+
             $user->save();
 
             return redirect()

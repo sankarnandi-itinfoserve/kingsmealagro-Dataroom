@@ -97,6 +97,14 @@ document.addEventListener('DOMContentLoaded', function () {
     // again — close them when the user clicks anywhere else on the page.
     document.addEventListener('click', function (e) {
         document.querySelectorAll('.has-submenu.open').forEach(function (li) {
+            // Pinned open by the server because its own page is the current
+            // route (e.g. Shared Folders' tree while on the Drive page) — it
+            // isn't a transient dropdown, so clicking anything in the page's
+            // own main content (favorite, download, checkboxes, ...) must
+            // not collapse it.
+            if (li.dataset.pinnedOpen === '1') {
+                return;
+            }
             if (!li.contains(e.target)) {
                 li.classList.remove('open');
             }

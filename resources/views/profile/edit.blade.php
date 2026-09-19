@@ -12,11 +12,15 @@
             <div class="pf-hero-bg"></div>
             <div class="pf-hero-content">
                 <div class="pf-avatar-wrap">
-                    @if (auth()->user()->avatar)
-                        <img src="{{ asset('storage/' . auth()->user()->avatar) }}" alt="Avatar" class="pf-avatar-img">
-                    @else
-                        <i class="fa-solid fa-circle-user pf-avatar-icon"></i>
-                    @endif
+                    <label for="profileAvatarInput" class="pf-avatar-edit-label" title="Change profile photo">
+                        <img id="pfHeroAvatarImg"
+                            src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : '' }}"
+                            alt="Avatar" class="pf-avatar-img"
+                            style="{{ auth()->user()->avatar ? '' : 'display:none' }}">
+                        <i id="pfHeroAvatarIcon" class="fa-solid fa-circle-user pf-avatar-icon"
+                            style="{{ auth()->user()->avatar ? 'display:none' : '' }}"></i>
+                        <span class="pf-avatar-hover"><i class="fa-solid fa-camera"></i></span>
+                    </label>
                     <span class="pf-avatar-badge"><i class="fa-solid fa-circle-check"></i></span>
                 </div>
                 <div class="pf-hero-info">
@@ -142,6 +146,33 @@
             display: block;
             color: rgba(255, 255, 255, .45);
             filter: drop-shadow(0 4px 12px rgba(0, 0, 0, .3));
+        }
+
+        .pf-avatar-edit-label {
+            position: relative;
+            display: block;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .pf-avatar-hover {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, .5);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            opacity: 0;
+            transition: opacity .15s;
+        }
+
+        .pf-avatar-edit-label:hover .pf-avatar-hover {
+            opacity: 1;
         }
 
         .pf-avatar-badge {
@@ -434,4 +465,25 @@
             }
         }
     </style>
+@endpush
+
+@push('script')
+    <script>
+        function pfPreviewAvatar(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            const img = document.getElementById('pfHeroAvatarImg');
+            const icon = document.getElementById('pfHeroAvatarIcon');
+            const reader = new FileReader();
+            reader.onload = function() {
+                if (img) {
+                    img.src = reader.result;
+                    img.style.display = 'block';
+                }
+                if (icon) icon.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+    </script>
 @endpush
