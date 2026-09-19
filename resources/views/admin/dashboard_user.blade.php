@@ -199,88 +199,8 @@
 
     </div>
 
-    {{-- ══════════════════════════════════════════════════════════
-     RECENTLY ACCESSED FILES
-══════════════════════════════════════════════════════════ --}}
-    <div class="db-card">
-        <div class="db-card-head">
-            <div>
-                <div class="db-card-title">Recently Accessed Files</div>
-                <div class="db-card-sub">Documents you recently opened — visible only to you.</div>
-            </div>
-            <div class="d-flex gap-2">
-                <button class="db-scroll-btn" id="filesPrev" title="Previous"><i
-                        class="fa-solid fa-chevron-left"></i></button>
-                <button class="db-scroll-btn" id="filesNext" title="Next"><i
-                        class="fa-solid fa-chevron-right"></i></button>
-            </div>
-        </div>
-
-        <div class="db-files-wrap">
-            <div class="db-files-track" id="filesTrack">
-                @forelse ($recentFiles as $recent)
-                    @php
-                        $fname = $recent->folder->name;
-                        $ext = strtolower(pathinfo($fname, PATHINFO_EXTENSION));
-                        [$bg, $fa, $clr] = match (true) {
-                            in_array($ext, ['doc', 'docx']) => ['#dbeafe', 'fa-file-word', '#2563eb'],
-                            in_array($ext, ['xls', 'xlsx']) => ['#dcfce7', 'fa-file-excel', '#16a34a'],
-                            in_array($ext, ['ppt', 'pptx']) => ['#ffedd5', 'fa-file-powerpoint', '#ea580c'],
-                            $ext === 'pdf' => ['#fee2e2', 'fa-file-pdf', '#dc2626'],
-                            in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp']) => [
-                                '#fae8ff',
-                                'fa-file-image',
-                                '#9333ea',
-                            ],
-                            in_array($ext, ['zip', 'rar', '7z']) => ['#f1f5f9', 'fa-file-zipper', '#64748b'],
-                            default => ['#f1f5f9', 'fa-file', '#64748b'],
-                        };
-                    @endphp
-                    <a href="{{ route('files.preview', base64_encode($recent->folder->id)) }}" class="db-file-card"
-                        title="{{ $fname }}">
-                        <div class="db-file-thumb" style="background:{{ $bg }};color:{{ $clr }};">
-                            <i class="fa-solid {{ $fa }}"></i>
-                        </div>
-                        <div class="db-file-info">
-                            <div class="db-file-name">{{ Str::limit($fname, 20) }}</div>
-                            <div class="db-file-ext">{{ strtoupper($ext) ?: 'FILE' }}</div>
-                        </div>
-                    </a>
-                @empty
-                    <div class="db-files-empty">
-                        <i class="fa-regular fa-clock"></i>
-                        <span>No recently viewed files yet. Open a document to see it here.</span>
-                    </div>
-                @endforelse
-            </div>
-        </div>
-    </div>
-
 @endsection
 
 @push('addOnCss')
     @include('admin.dashboard._styles')
-@endpush
-
-@push('script')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var ft = document.getElementById('filesTrack');
-            var prev = document.getElementById('filesPrev');
-            var next = document.getElementById('filesNext');
-
-            if (ft && prev) prev.addEventListener('click', function() {
-                ft.scrollBy({
-                    left: -300,
-                    behavior: 'smooth'
-                });
-            });
-            if (ft && next) next.addEventListener('click', function() {
-                ft.scrollBy({
-                    left: 300,
-                    behavior: 'smooth'
-                });
-            });
-        });
-    </script>
 @endpush

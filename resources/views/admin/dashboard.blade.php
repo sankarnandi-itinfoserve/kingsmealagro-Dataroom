@@ -216,8 +216,9 @@
     </div>
 
     {{-- ══════════════════════════════════════════════════════════
-     RECENTLY ACCESSED FILES
+     RECENTLY ACCESSED FILES — Super Admin only
 ══════════════════════════════════════════════════════════ --}}
+    @if (auth()->user()->hasRole('super-admin'))
     <div class="db-card">
         <div class="db-card-head">
             <div>
@@ -271,6 +272,7 @@
             </div>
         </div>
     </div>
+    @endif
 
 @endsection
 
