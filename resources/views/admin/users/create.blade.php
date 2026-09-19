@@ -38,16 +38,6 @@
 
             <div class="row g-3 mb-3">
                 <div class="col-md-6">
-                    <label class="ue-label">Username</label>
-                    <div class="ue-input-wrap">
-                        <i class="fa-solid fa-at ue-input-icon"></i>
-                        <input type="text" name="username" id="cuUsername" value="{{ old('username') }}"
-                            class="ue-input @error('username') ue-input-err @enderror" required autocomplete="off">
-                    </div>
-                    @error('username') <span class="ue-err">{{ $message }}</span> @enderror
-                </div>
-
-                <div class="col-md-6">
                     <label class="ue-label">Email</label>
                     <div class="ue-input-wrap">
                         <i class="fa-solid fa-envelope ue-input-icon"></i>
@@ -56,9 +46,7 @@
                     </div>
                     @error('email') <span class="ue-err">{{ $message }}</span> @enderror
                 </div>
-            </div>
 
-            <div class="row g-3 mb-3">
                 {{-- Role --}}
                 <div class="col-md-6">
                     <label class="ue-label">Select Role</label>
@@ -77,7 +65,6 @@
                     </div>
                     @error('role') <span class="ue-err">{{ $message }}</span> @enderror
                 </div>
-
             </div>
 
             <div class="row g-3 mb-1">
@@ -118,30 +105,6 @@
 </div>
 
 <script>
-    (function() {
-        var fname = document.getElementById('cuFname');
-        var lname = document.getElementById('cuLname');
-        var username = document.getElementById('cuUsername');
-        if (!fname || !lname || !username) return;
-
-        function slugify(value) {
-            return value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
-        }
-
-        var lastAuto = username.value;
-
-        function updateUsername() {
-            var generated = [slugify(fname.value), slugify(lname.value)].filter(Boolean).join('_');
-            if (username.value === '' || username.value === lastAuto) {
-                username.value = generated;
-            }
-            lastAuto = generated;
-        }
-
-        fname.addEventListener('input', updateUsername);
-        lname.addEventListener('input', updateUsername);
-    })();
-
     function toggleUePasswordField(inputId, btn) {
         var input = document.getElementById(inputId);
         if (!input) return;

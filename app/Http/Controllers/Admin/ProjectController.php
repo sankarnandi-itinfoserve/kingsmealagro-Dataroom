@@ -211,8 +211,10 @@ class ProjectController extends Controller
     public function destroy(Folder $project)
     {
         try {
+            $name = $project->name;
             $project->delete();
-            return redirect()->route('projects.index')->with('success', 'Folder deleted.');
+            return redirect()->route('projects.index')
+                ->with('success', 'Folder "' . $name . '" has been moved to Deleted Items. You can restore it anytime.');
         } catch (\Exception $e) {
             Log::error('ProjectController::destroy failed: ' . $e->getMessage());
             return null;
