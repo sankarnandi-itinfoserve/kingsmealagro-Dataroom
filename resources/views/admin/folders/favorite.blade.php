@@ -658,7 +658,7 @@
                         <div class="fb-empty-state">
                             <div class="fb-empty-icon"><i class="fa-solid fa-star"></i></div>
                             <p class="fb-empty-title">No favorites yet</p>
-                            <p class="fb-empty-sub">Star files or folders in Project Folders to find them here quickly.</p>
+                            <p class="fb-empty-sub">Star files or folders to find them here quickly.</p>
                             <a href="{{ route('shared.folders') }}" class="fb-empty-cta">
                                 <i class="fa-solid fa-star"></i> Add Favorite
                             </a>

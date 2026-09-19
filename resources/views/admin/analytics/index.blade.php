@@ -17,7 +17,7 @@
         <div class="an-header-icon"><i class="fa-solid fa-chart-line"></i></div>
         <div class="an-header-body">
             <h5 class="an-title">Analytics</h5>
-            <nav class="an-breadcrumb"><span>Overview — All Projects</span></nav>
+            <nav class="an-breadcrumb"><span>Overview — All Folders</span></nav>
         </div>
         <div class="an-header-actions">
             <a href="{{ route('analytics.index', ['export' => 'csv']) }}" class="an-btn an-btn-ghost">
@@ -71,7 +71,7 @@
             </div>
             <div class="an-stat-body">
                 <div class="an-stat-val">{{ number_format($activeProjects) }}</div>
-                <div class="an-stat-label">Active Projects</div>
+                <div class="an-stat-label">Active Folders</div>
             </div>
         </div>
     </div>
@@ -120,7 +120,7 @@
             <div class="an-card h-100 w-100">
                 <div class="an-card-header">
                     <span class="an-card-icon"><i class="fa-solid fa-diagram-project"></i></span>
-                    <span class="an-card-title">Project Analytics</span>
+                    <span class="an-card-title">Folder Analytics</span>
                     <div class="an-proj-search-wrap ms-auto">
                         <i class="fa-solid fa-magnifying-glass"></i>
                         <input type="text" id="projSearchInput" placeholder="Search…" autocomplete="off">
@@ -152,7 +152,7 @@
                             <i class="fa-solid fa-chevron-right an-proj-arrow"></i>
                         </a>
                     @empty
-                        <div class="an-empty"><i class="fa-solid fa-diagram-project"></i><span>No projects</span></div>
+                        <div class="an-empty"><i class="fa-solid fa-diagram-project"></i><span>No folders</span></div>
                     @endforelse
                 </div>
             </div>

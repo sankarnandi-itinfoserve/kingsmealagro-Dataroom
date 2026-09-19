@@ -10,7 +10,7 @@
         <div>
             <h4 class="fw-bold text-dark mb-1">Templates</h4>
             <p class="text-muted small mb-0">
-                Reusable M&amp;A folder structures. Create a template from an existing project to speed up new deal setup.
+                Reusable M&amp;A folder structures. Create a template from an existing folder to speed up new deal setup.
             </p>
         </div>
         <button type="button"
@@ -61,11 +61,11 @@
                     </div>
 
                     <div class="col-12 col-md-6">
-                        <label for="tpl_source" class="form-label fw-medium small">Source Project</label>
+                        <label for="tpl_source" class="form-label fw-medium small">Source Folder</label>
                         <select id="tpl_source"
                                 name="source_folder_id"
                                 class="form-select form-select-sm @error('source_folder_id') is-invalid @enderror">
-                            <option value="">— No source project —</option>
+                            <option value="">— No source folder —</option>
                             @if (!empty($folders))
                                 @foreach ($folders as $folder)
                                     <option value="{{ $folder->id }}"
@@ -168,7 +168,7 @@
                 <div class="d-flex flex-column align-items-center justify-content-center py-5 text-muted">
                     <i class="fa-regular fa-copy fa-3x mb-3 opacity-40"></i>
                     <p class="fw-medium mb-0">No templates yet.</p>
-                    <p class="small mt-1">Create a template to quickly replicate folder structures for new projects.</p>
+                    <p class="small mt-1">Create a template to quickly replicate folder structures for new folders.</p>
                 </div>
             @endif
         </div>

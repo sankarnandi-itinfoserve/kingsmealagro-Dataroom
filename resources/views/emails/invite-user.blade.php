@@ -5,8 +5,8 @@
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f6f8;padding:30px 0;">
   <tr><td align="center">
     <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08);">
-      <tr><td style="background:#ffffff;padding:20px 32px;border-bottom:3px solid #1e3a5f;text-align:center;">
-        <img src="{{ url('admin/images/logo.png') }}" alt="{{ config('app.name') }}" width="160" height="46" style="max-height:46px;width:auto;display:inline-block;">
+      <tr><td style="background:#1e3a5f;padding:20px 32px;text-align:center;">
+        <img src="{{ url('admin/images/kingsmeal-agro-logo.png') }}" alt="{{ config('app.name') }}" width="160" height="45" style="max-height:46px;width:auto;display:inline-block;">
       </td></tr>
       <tr><td style="background:#1e3a5f;padding:16px 32px;">
         <h2 style="color:#fff;margin:0;font-size:18px;letter-spacing:.3px;">{{ config('app.name') }}</h2>

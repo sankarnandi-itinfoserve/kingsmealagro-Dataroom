@@ -9,12 +9,12 @@
     <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
         <div>
             <h4 class="fw-bold text-dark mb-1">Archives</h4>
-            <p class="text-muted small mb-0">Archived projects can be restored at any time.</p>
+            <p class="text-muted small mb-0">Archived folders can be restored at any time.</p>
         </div>
         <a href="{{ route('projects.index') }}"
            class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1">
             <i class="fa-solid fa-arrow-left"></i>
-            Back to Projects
+            Back to Folders
         </a>
     </div>
 
@@ -74,8 +74,8 @@
             @else
                 <div class="d-flex flex-column align-items-center justify-content-center py-5 text-muted">
                     <i class="fa-regular fa-folder-open fa-3x mb-3 opacity-40"></i>
-                    <p class="fw-medium mb-0">No archived projects.</p>
-                    <p class="small mt-1">Projects you archive will appear here.</p>
+                    <p class="fw-medium mb-0">No archived folders.</p>
+                    <p class="small mt-1">Folders you archive will appear here.</p>
                 </div>
             @endif
         </div>
