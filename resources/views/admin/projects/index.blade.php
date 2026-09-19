@@ -967,7 +967,7 @@
                 Swal.fire({
                     title: 'Delete Folder?',
                     html: '<div class="swal-theme-icon" style="background:#fee2e2;color:#dc2626;"><i class="fa-solid fa-trash"></i></div>"<strong>' +
-                        name + '</strong>" will be permanently removed.',
+                        name + '</strong>" will be moved to Deleted Items. You can restore it anytime.',
                     width: '380px',
                     showCancelButton: true,
                     confirmButtonColor: '#dc2626',
@@ -1027,7 +1027,7 @@
                             showToast(
                                 failed > 0 ?
                                 (failed + ' of ' + ids.length + ' item(s) failed.') :
-                                (ids.length + ' folder(s) ' + verbPast + '.'),
+                                (ids.length + ' folder(s) ' + verbPast + '. You can restore them from Deleted Items.'),
                                 failed > 0 ? 'danger' : 'success'
                             );
                             setTimeout(function() {
@@ -1047,7 +1047,7 @@
 
                 Swal.fire({
                     title: 'Delete ' + ids.length + ' folder(s)?',
-                    html: '<div class="swal-theme-icon" style="background:#fee2e2;color:#dc2626;"><i class="fa-solid fa-trash"></i></div>Selected folders will be moved to the archive.',
+                    html: '<div class="swal-theme-icon" style="background:#fee2e2;color:#dc2626;"><i class="fa-solid fa-trash"></i></div>Selected folders will be moved to Deleted Items. You can restore them anytime.',
                     width: '380px',
                     showCancelButton: true,
                     confirmButtonColor: '#dc2626',

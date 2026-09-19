@@ -152,7 +152,6 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'fname' => 'required|string|max:255',
             'lname' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users,username',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
             'avatar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
@@ -181,7 +180,7 @@ class UserController extends Controller
                 'fname' => $request->fname,
                 'lname' => $request->lname,
                 'displayName' => $request->fname . ' ' . $request->lname,
-                'username' => $request->username,
+                'username' => $this->generateUniqueUsername($request->fname, $request->lname),
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
 
@@ -313,6 +312,28 @@ class UserController extends Controller
         } catch (\Exception $e) {
             Log::error('UserController::applyRoleFromRequest failed: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * The Create User form no longer asks for a username, so derive one
+     * from the name (matching the old JS auto-fill behavior) and append a
+     * numeric suffix on collision to satisfy the unique constraint.
+     */
+    private function generateUniqueUsername(string $fname, string $lname): string
+    {
+        $base = trim(Str::slug($fname . ' ' . $lname, '_'), '_');
+        if ($base === '') {
+            $base = 'user';
+        }
+
+        $username = $base;
+        $suffix = 1;
+        while (User::where('username', $username)->exists()) {
+            $suffix++;
+            $username = $base . '_' . $suffix;
+        }
+
+        return $username;
     }
 
     public function destroy($id)
