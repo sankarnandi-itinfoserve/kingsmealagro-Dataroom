@@ -25,7 +25,8 @@
                 </a>
             </li>
             <li id="treeViewMenu"
-                class="has-submenu {{ request()->routeIs('shared.folders') || isset($activeFileId) ? 'open' : '' }}">
+                class="has-submenu {{ request()->routeIs('shared.folders') || isset($activeFileId) ? 'open' : '' }}"
+                data-pinned-open="{{ request()->routeIs('shared.folders') || isset($activeFileId) ? '1' : '0' }}">
                 <a id="treeViewMenuLink" href="{{ route('shared.folders') }}" data-tooltip="Shared Folders"
                     class="{{ request()->routeIs('shared.folders') ? 'active menu-item' : '' }}">
                     <i class="fa fa-folder"></i>

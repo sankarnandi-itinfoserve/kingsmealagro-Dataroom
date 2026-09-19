@@ -13,10 +13,16 @@
         @csrf
     </form>
 
-    <form method="POST" action="{{ route('profile.update') }}">
+    <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
         @csrf
         @method('PATCH')
-    
+
+        <input type="file" id="profileAvatarInput" name="avatar" class="d-none"
+               accept="image/png,image/jpeg" onchange="pfPreviewAvatar(event)">
+        @error('avatar')
+            <small class="text-danger d-block mb-2">{{ $message }}</small>
+        @enderror
+
         <div class="row g-3">
     
             <!-- First Name -->
