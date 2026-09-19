@@ -245,4 +245,25 @@ class Folder extends Model
             return null;
         }
     }
+
+    /**
+     * Restore this (soft-deleted) row plus every descendant that was
+     * cascade-deleted along with it, so a folder comes back from the
+     * archive with all of its original contents intact rather than empty.
+     * parent_item_id is never touched by delete()/restore(), so everything
+     * naturally reappears exactly where it was.
+     */
+    public function restoreWithDescendants(): void
+    {
+        try {
+            $this->restore();
+
+            static::withTrashed()
+                ->where('parent_item_id', $this->id)
+                ->get()
+                ->each(fn (Folder $child) => $child->restoreWithDescendants());
+        } catch (\Exception $e) {
+            Log::error('Folder::restoreWithDescendants failed: ' . $e->getMessage());
+        }
+    }
 }

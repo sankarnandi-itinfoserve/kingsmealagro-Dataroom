@@ -32,6 +32,10 @@
                 </div>
             </div>
 
+            <p class="fb-archive-subtitle">
+                Deleted folders and files land here. Restoring puts them back exactly where they were.
+            </p>
+
             <div class="fb-layout">
                 <section class="fb-main">
 
@@ -45,7 +49,7 @@
 
                         <span class="fb-toolbar-sep"></span>
 
-                        <button type="button" class="fb-tool-btn" id="archiveBulkRestoreBtn">
+                        <button type="button" class="fb-tool-btn fb-tool-btn-success-soft" id="archiveBulkRestoreBtn">
                             <i class="fa-solid fa-trash-arrow-up"></i> Restore Selected
                         </button>
                     </div>
@@ -56,16 +60,40 @@
                                 <tr>
                                     <th class="fb-col-check"></th>
                                     <th>Name</th>
-                                    <th>Archived On</th>
+                                    <th>Was In</th>
+                                    <th>Deleted On</th>
                                     <th class="text-end">Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="archiveListBody">
                                 @forelse ($projects as $project)
+                                    @php
+                                        $isRoot = is_null($project->parent_item_id);
+                                        $fullPath = $isRoot
+                                            ? null
+                                            : collect($project->getBreadcrumb())->reject(fn($n) => $n->id === $project->id)->pluck('name')->implode(' / ');
+
+                                        if ($project->type === 'file') {
+                                            $ext = strtolower(pathinfo($project->name, PATHINFO_EXTENSION));
+                                            [$rowIcon, $rowIconColor] = match (true) {
+                                                in_array($ext, ['doc', 'docx']) => ['fa-file-word', '#2563eb'],
+                                                in_array($ext, ['xls', 'xlsx']) => ['fa-file-excel', '#16a34a'],
+                                                in_array($ext, ['ppt', 'pptx']) => ['fa-file-powerpoint', '#ea580c'],
+                                                $ext === 'pdf' => ['fa-file-pdf', '#dc2626'],
+                                                in_array($ext, ['png', 'jpg', 'jpeg', 'gif']) => ['fa-file-image', '#7c3aed'],
+                                                in_array($ext, ['zip', 'rar']) => ['fa-file-zipper', '#b45309'],
+                                                default => ['fa-file', '#94a3b8'],
+                                            };
+                                        } else {
+                                            $rowIcon = 'fa-folder';
+                                            $rowIconColor = '#fbbf24';
+                                        }
+                                    @endphp
                                     <tr class="archive-row" data-name="{{ strtolower($project->name) }}">
                                         <td><input type="checkbox" class="fb-row-check archive-check" data-id="{{ $project->id }}"></td>
                                         <td>
                                             <div class="d-flex align-items-center gap-2">
+                                                <i class="fa-solid {{ $rowIcon }}" style="color:{{ $rowIconColor }};font-size:13px;"></i>
                                                 <span class="fw-semibold text-dark" style="font-size:13.5px;">{{ $project->name }}</span>
                                             </div>
                                             @if ($project->creator)
@@ -73,6 +101,9 @@
                                                     by {{ trim($project->creator->fname . ' ' . $project->creator->lname) }}
                                                 </div>
                                             @endif
+                                        </td>
+                                        <td style="font-size:12.5px;max-width:260px;" class="text-muted text-truncate" title="{{ $isRoot ? '' : $fullPath }}">
+                                            {{ $isRoot ? 'Root Folder' : ($fullPath !== '' ? $fullPath : '—') }}
                                         </td>
                                         <td style="font-size:13px;">
                                             {{ optional($project->deleted_at)->format('M d, Y') }}
@@ -91,9 +122,9 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="text-center py-5 text-muted">
+                                        <td colspan="5" class="text-center py-5 text-muted">
                                             <i class="fa-solid fa-box-archive fa-2x mb-2 d-block opacity-25"></i>
-                                            No archived folders.
+                                            No deleted items.
                                         </td>
                                     </tr>
                                 @endforelse
@@ -116,14 +147,33 @@
 
 @push('addOnCss')
     <style>
+        .fb-archive-subtitle {
+            margin: -6px 0 14px;
+            font-size: 12.5px;
+            color: #94a3b8;
+        }
+
+        .fb-tool-btn-success-soft {
+            background: #f0fdf4 !important;
+            border-color: #bbf7d0 !important;
+            color: #16a34a !important;
+            text-decoration: none !important;
+        }
+
+        .fb-tool-btn-success-soft:hover {
+            background: #dcfce7 !important;
+            border-color: #86efac !important;
+            color: #15803d !important;
+        }
+
         .prj-restore-deleted-btn {
             display: inline-flex;
             align-items: center;
             padding: 6px 14px;
             border-radius: 8px;
-            border: 1.5px solid #dc2626;
-            background: #fef2f2;
-            color: #dc2626;
+            border: 1.5px solid #16a34a;
+            background: #f0fdf4;
+            color: #16a34a;
             font-size: 12.5px;
             font-weight: 600;
             cursor: pointer;
@@ -131,7 +181,7 @@
         }
 
         .prj-restore-deleted-btn:hover {
-            background: #dc2626;
+            background: #16a34a;
             color: #fff;
         }
     </style>
@@ -177,11 +227,11 @@
                 const name = form.data('restore-name');
                 Swal.fire({
                     title: 'Restore Folder?',
-                    html: '<div class="swal-theme-icon" style="background:#fee2e2;color:#dc2626;"><i class="fa-solid fa-trash-arrow-up"></i></div>"' +
+                    html: '<div class="swal-theme-icon" style="background:#dcfce7;color:#16a34a;"><i class="fa-solid fa-trash-arrow-up"></i></div>"' +
                         name + '" will be recovered and moved back to Active.',
                     width: '380px',
                     showCancelButton: true,
-                    confirmButtonColor: '#dc2626',
+                    confirmButtonColor: '#16a34a',
                     confirmButtonText: 'Yes, restore',
                     cancelButtonText: 'Cancel',
                     customClass: {
@@ -206,10 +256,10 @@
 
                 Swal.fire({
                     title: 'Restore ' + ids.length + ' folder(s)?',
-                    html: '<div class="swal-theme-icon" style="background:#fee2e2;color:#dc2626;"><i class="fa-solid fa-trash-arrow-up"></i></div>Selected folders will be recovered and moved back to Active.',
+                    html: '<div class="swal-theme-icon" style="background:#dcfce7;color:#16a34a;"><i class="fa-solid fa-trash-arrow-up"></i></div>Selected folders will be recovered and moved back to Active.',
                     width: '380px',
                     showCancelButton: true,
-                    confirmButtonColor: '#dc2626',
+                    confirmButtonColor: '#16a34a',
                     confirmButtonText: 'Yes, restore them',
                     cancelButtonText: 'Cancel',
                     customClass: {

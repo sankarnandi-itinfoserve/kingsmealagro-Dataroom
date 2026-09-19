@@ -44,16 +44,24 @@
                  right edge, regardless of whether a badge (variable width,
                  not always present) precedes it — keeps the icons in a
                  straight column across every row. --}}
-            @if ($node->type === 'folder')
-                <span class="pft-row-actions">
+            <span class="pft-row-actions">
+                @if ($node->type === 'folder')
                     <button type="button" class="pft-row-action-btn" data-row-add-folder="{{ $node->id }}" title="Add sub-folder here">
                         <i class="fa-solid fa-folder-plus"></i>
                     </button>
                     <button type="button" class="pft-row-action-btn" data-row-add-file="{{ $node->id }}" title="Add file here">
                         <i class="fa-solid fa-file-circle-plus"></i>
                     </button>
-                </span>
-            @endif
+                    <button type="button" class="pft-row-action-btn" data-row-import-zip="{{ $node->id }}" title="Import a ZIP here">
+                        <i class="fa-solid fa-file-zipper"></i>
+                    </button>
+                @endif
+                <button type="button" class="pft-row-action-btn" data-row-delete="{{ $node->id }}"
+                    data-row-delete-name="{{ $node->name }}" data-row-delete-type="{{ $node->type }}"
+                    title="Delete {{ $node->type === 'folder' ? 'folder' : 'file' }}">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            </span>
         </div>
 
         @if ($hasChildren)

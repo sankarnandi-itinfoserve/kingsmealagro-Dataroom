@@ -697,6 +697,80 @@
             color: #b91c1c !important;
         }
 
+        /* ── Mobile: turn each row into a card instead of a scrollable table ──── */
+        @media (max-width: 767.98px) {
+            #projectTable thead {
+                display: none;
+            }
+
+            #projectTable,
+            #projectTable tbody,
+            #projectTable tr {
+                display: block;
+                width: 100%;
+            }
+
+            #projectTable tr.project-row {
+                display: flex;
+                flex-wrap: wrap;
+                column-gap: 10px;
+                row-gap: 10px;
+                align-items: center;
+                border: 1px solid #e5e7eb;
+                border-radius: 12px;
+                padding: 14px;
+                margin-bottom: 12px;
+                background: #fff;
+                box-shadow: 0 2px 6px rgba(2, 6, 23, .04);
+            }
+
+            #projectTable tr.project-row td {
+                display: block;
+                border: none !important;
+                padding: 0 !important;
+            }
+
+            #projectTable tr.project-row td:nth-child(1) {
+                flex: 0 0 auto;
+                order: 1;
+            }
+
+            #projectTable tr.project-row td:nth-child(2) {
+                flex: 1 1 auto;
+                order: 2;
+                /* Forces this item to claim (almost) the whole line no
+                   matter how short the name text is, so the wrapping
+                   algorithm (which breaks lines off content size, not
+                   post-grow size) always pushes the buttons to their own
+                   line instead of tucking one next to a short name. */
+                min-width: calc(100% - 40px);
+            }
+
+            #projectTable tr.project-row td:nth-child(3),
+            #projectTable tr.project-row td:nth-child(4) {
+                flex: 0 0 auto;
+                order: 3;
+            }
+
+            #projectTable tr.project-row td:nth-child(5) {
+                flex: 1 0 100%;
+                order: 4;
+            }
+
+            #projectTable .fb-name-cell a {
+                font-size: 15px;
+            }
+
+            #projectTable .fb-fileroom-btn,
+            #projectTable .fb-analytics-btn {
+                white-space: nowrap;
+            }
+
+            #projectTable .fb-row-actions {
+                justify-content: flex-start;
+            }
+        }
+
     </style>
 @endpush
 

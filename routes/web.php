@@ -128,6 +128,7 @@ Route::middleware(['auth', 'session.timeout'])->group(function () {
     Route::get('/folders/shared/{parent_id?}', [FolderController::class, 'index'])->name('shared.folders');
     // Route::get('/folders/shared/{parent_id}', [FolderController::class, 'sharedIndex'])->name('shared.folders');
     Route::post('/folders', [FolderController::class, 'store'])->name('folders.store');
+    Route::post('/folders/import-zip', [FolderController::class, 'importZip'])->name('folders.importZip');
     Route::put('/folders/{id}', [FolderController::class, 'update'])->name('folders.update');
     Route::delete('/folders/{id}', [FolderController::class, 'destroy'])->name('folders.destroy');
     Route::post('/toggle-favorite', [FolderController::class, 'toggleFavorite']);
